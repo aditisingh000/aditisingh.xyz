@@ -292,21 +292,72 @@ function getDurationMonths(startDate, endDate) {
     return Math.max(1, months); // at least 1 month so short stints still have a visible box
 }
 
-// Load and display resume timeline
+function getStartEnd(item) {
+    const start = new Date(item.startDate);
+    const end = item.endDate === 'Present' ? new Date() : new Date(item.endDate);
+    return { start: start.getTime(), end: end.getTime() };
+}
+
+function overlaps(itemA, itemB) {
+    const a = getStartEnd(itemA);
+    const b = getStartEnd(itemB);
+    return a.start < b.end && a.end > b.start;
+}
+
+// Union-find: group items that overlap (transitively). Returns array of groups (each group = array of items).
+function buildOverlapGroups(items) {
+    const n = items.length;
+    const parent = items.map((_, i) => i);
+    function find(i) {
+        if (parent[i] !== i) parent[i] = find(parent[i]);
+        return parent[i];
+    }
+    function union(i, j) {
+        parent[find(i)] = find(j);
+    }
+    for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+            if (overlaps(items[i], items[j])) union(i, j);
+        }
+    }
+    const groupByRoot = new Map();
+    items.forEach((item, i) => {
+        const r = find(i);
+        if (!groupByRoot.has(r)) groupByRoot.set(r, []);
+        groupByRoot.get(r).push(item);
+    });
+    return Array.from(groupByRoot.values());
+}
+
+function renderTimelineContent(item, durationRatio, maxMonths) {
+    const isExperience = item.type === 'experience';
+    const durationStyle = `--duration-ratio: ${durationRatio};`;
+    return `
+        <div class="timeline-content" style="${durationStyle}">
+            <div class="timeline-date">${item.startDate} - ${item.endDate}</div>
+            <h3 class="timeline-title">${isExperience ? item.title : item.degree}</h3>
+            <div class="timeline-company">${isExperience ? item.company : item.institution}</div>
+            <div class="timeline-location">${item.location}</div>
+            <p class="timeline-description">${item.description}</p>
+            ${item.achievements && item.achievements.length > 0 ? `
+                <ul class="timeline-achievements">
+                    ${item.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
+                </ul>
+            ` : ''}
+        </div>
+    `;
+}
+
+// Load and display resume timeline (concurrent items shown side by side like Google Calendar)
 function loadResume() {
     const timelineContainer = document.getElementById('timelineContainer');
     
     if (!timelineContainer) return;
     
-    // Combine and sort all items by date (most recent first)
     const allItems = [
         ...resumeData.experience.map(item => ({ ...item, type: 'experience' })),
         ...resumeData.education.map(item => ({ ...item, type: 'education' }))
-    ].sort((a, b) => {
-        const dateA = new Date(a.endDate === 'Present' ? '2099-12-31' : a.endDate);
-        const dateB = new Date(b.endDate === 'Present' ? '2099-12-31' : b.endDate);
-        return dateB - dateA;
-    });
+    ];
     
     if (allItems.length === 0) {
         timelineContainer.innerHTML = `
@@ -317,39 +368,53 @@ function loadResume() {
         return;
     }
     
-    // Compute duration (months) for each item and find max for scaling
     const itemsWithDuration = allItems.map(item => ({
         ...item,
         durationMonths: getDurationMonths(item.startDate, item.endDate)
     }));
     const maxMonths = Math.max(...itemsWithDuration.map(i => i.durationMonths));
     
-    // Create timeline structure; box height proportional to duration
+    const groups = buildOverlapGroups(itemsWithDuration);
+    // Sort groups by latest end date in group (most recent first)
+    groups.sort((ga, gb) => {
+        const maxEnd = (g) => Math.max(...g.map(i => getStartEnd(i).end));
+        return maxEnd(gb) - maxEnd(ga);
+    });
+    
     let timelineHTML = '<div class="timeline">';
     
-    itemsWithDuration.forEach((item, index) => {
-        const isExperience = item.type === 'experience';
-        const side = isExperience ? 'left' : 'right';
-        const durationRatio = item.durationMonths / maxMonths; // 0..1
-        const durationStyle = `--duration-ratio: ${durationRatio};`;
-        
-        timelineHTML += `
-            <div class="timeline-item ${side}">
-                <div class="timeline-content" style="${durationStyle}">
-                    <div class="timeline-date">${item.startDate} - ${item.endDate}</div>
-                    <h3 class="timeline-title">${isExperience ? item.title : item.degree}</h3>
-                    <div class="timeline-company">${isExperience ? item.company : item.institution}</div>
-                    <div class="timeline-location">${item.location}</div>
-                    <p class="timeline-description">${item.description}</p>
-                    ${item.achievements && item.achievements.length > 0 ? `
-                        <ul class="timeline-achievements">
-                            ${item.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
-                        </ul>
-                    ` : ''}
+    groups.forEach((group) => {
+        if (group.length === 1) {
+            const item = group[0];
+            const isExperience = item.type === 'experience';
+            const side = isExperience ? 'left' : 'right';
+            const durationRatio = item.durationMonths / maxMonths;
+            timelineHTML += `
+                <div class="timeline-item ${side}">
+                    ${renderTimelineContent(item, durationRatio, maxMonths)}
+                    <div class="timeline-marker"></div>
                 </div>
-                <div class="timeline-marker"></div>
-            </div>
-        `;
+            `;
+            return;
+        }
+        // Concurrent row: side-by-side like Google Calendar
+        const leftItems = group.filter(i => i.type === 'experience');
+        const rightItems = group.filter(i => i.type === 'education');
+        timelineHTML += '<div class="timeline-row">';
+        timelineHTML += '<div class="timeline-row-side timeline-row-left">';
+        leftItems.forEach((item) => {
+            const durationRatio = item.durationMonths / maxMonths;
+            timelineHTML += renderTimelineContent(item, durationRatio, maxMonths);
+        });
+        timelineHTML += '</div>';
+        timelineHTML += '<div class="timeline-marker"></div>';
+        timelineHTML += '<div class="timeline-row-side timeline-row-right">';
+        rightItems.forEach((item) => {
+            const durationRatio = item.durationMonths / maxMonths;
+            timelineHTML += renderTimelineContent(item, durationRatio, maxMonths);
+        });
+        timelineHTML += '</div>';
+        timelineHTML += '</div>';
     });
     
     timelineHTML += '</div>';

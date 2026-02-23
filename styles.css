@@ -335,6 +335,53 @@ main.content-hidden {
     flex-direction: row-reverse;
 }
 
+/* Concurrent row: overlapping items side by side (Google Calendar style) */
+.timeline-row {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 4rem;
+    gap: 0;
+}
+
+.timeline-row-side {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    min-width: 0;
+    padding: 0 1rem;
+}
+
+.timeline-row-left {
+    justify-content: flex-end;
+    padding-right: 2rem;
+}
+
+.timeline-row-right {
+    justify-content: flex-start;
+    padding-left: 2rem;
+}
+
+.timeline-row .timeline-content {
+    flex: 1;
+    min-width: 180px;
+    width: auto;
+}
+
+.timeline-row .timeline-marker {
+    position: relative;
+    left: 0;
+    transform: none;
+    flex-shrink: 0;
+    width: 12px;
+    margin: 1.5rem 0.5rem 0;
+}
+
+.timeline-row .timeline-content:hover {
+    border-color: var(--black);
+    transform: translateY(-2px);
+}
+
 .timeline-content {
     width: calc(50% - 3rem);
     min-height: calc(8rem + var(--duration-ratio, 0.5) * 14rem); /* proportional to time at position */
@@ -536,5 +583,27 @@ main.content-hidden {
 
     .timeline-marker {
         left: 2rem;
+    }
+
+    .timeline-row {
+        flex-direction: column;
+        margin-left: 0;
+    }
+
+    .timeline-row-side {
+        flex-direction: column;
+        padding: 0 0 0 4rem;
+        width: 100%;
+    }
+
+    .timeline-row .timeline-content {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .timeline-row .timeline-marker {
+        position: absolute;
+        left: 2rem;
+        margin-top: 1.5rem;
     }
 }

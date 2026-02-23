@@ -28,3 +28,7 @@ node_modules/
 # Build outputs
 dist/
 build/
+
+# Backups / archives
+*.tar
+*.tar.gz
