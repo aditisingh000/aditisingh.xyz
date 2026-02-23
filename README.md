@@ -42,6 +42,26 @@ aditisingh.xyz/
 - **Live:** [aditisingh.xyz](https://aditisingh.xyz) (or your deployed URL).
 - **Local:** Open `index.html` in a browser, or run a simple static server (e.g. `npx serve .` or `python -m http.server`) from the repo root.
 
+## Ensuring visitors can always see the notebooks
+
+For the in-page notebook viewer to work for everyone (not just you locally), the notebook files must be deployed with the site:
+
+1. **Commit and push the `projects/` folder**  
+   The `projects/` directory (and all `.ipynb` files inside it) must be in the repo and on the branch you deploy from. If `projects/` was previously untracked, add and push it:
+   ```bash
+   git add projects/
+   git commit -m "Add project notebooks for viewer"
+   git push
+   ```
+
+2. **Don’t exclude notebooks from deployment**  
+   Keep `projects/` and `*.ipynb` out of `.gitignore` (they are not ignored in this repo). Whatever you use to deploy (GitHub Pages, Netlify, Vercel, etc.) will then serve the notebooks from URLs like `https://yoursite.com/projects/.../file.ipynb`.
+
+3. **Verify after deploy**  
+   After publishing, open a notebook URL directly in a new tab, e.g.  
+   `https://aditisingh.xyz/projects/aditi-singh---7f56021c/Lab9b-Text_Analytics.ipynb`  
+   You should get the raw JSON file (or a download). If that works, the “View notebook” links on the site will work for visitors too.
+
 ## Contact
 
 Use the contact form on the site or the details in the About section.

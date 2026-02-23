@@ -61,13 +61,18 @@ const resumeData = {
     education: [
         {
             id: 1,
-            degree: "Master's in Computer Science with AI Graduate Certificate",
+            degree: "Master's in Computer Science (With AI graduate certificate)",
             institution: "University of Colorado at Boulder",
             location: "Boulder, CO",
             startDate: "2025-09",
             endDate: "2027-05",
             description: "Class of 2027.",
-            achievements: []
+            achievements: [
+                "Relevant courses:",
+                "Dynamic Programming, Greedy Algorithms",
+                "Approximation Algorithms and Linear Programming",
+                "Advanced Data Structures, RSA and Quantum Algorithms"
+            ]
         },
         {
             id: 2,
@@ -98,13 +103,13 @@ const resumeData = {
     ]
 };
 
-// Projects data – from Resume-AditiSingh.pdf (notebookUrl optional; omit for description-only cards)
+// Projects data – notebookUrl links to notebooks in projects folder (resume-aligned)
 const projects = [
     {
         id: 1,
         title: "Natural Language Processing (Annotation)",
         description: "Developed an annotated dataset for multi-class book audience ratings using 500 passages from Project Gutenberg and LibriVox. Conducted manual annotations, reconciled discrepancies, produced annotation guidelines, and built a classifier to evaluate dataset accuracy.",
-        notebookUrl: "",
+        notebookUrl: "projects/aditi-singh---7f56021c/Lab9b-Text_Analytics.ipynb",
         date: "2024",
         tags: ["NLP", "Annotation", "Classification"]
     },
@@ -112,23 +117,27 @@ const projects = [
         id: 2,
         title: "Machine Learning (Clinical & CNN)",
         description: "Built ML models to estimate angiographic coronary disease probabilities from global clinical and noninvasive angiography data. Also developed CNN models (convolutional layers, max pooling, fully connected) for multiclass image classification on CIFAR-10.",
-        notebookUrl: "",
+        notebookUrl: "projects/aditi-singh---7f56021c/Assignment1 Neural Networks - Aditi Singh and Ching Hei Chan.ipynb",
         date: "2024",
         tags: ["ML", "CNN", "CIFAR-10", "Healthcare"]
     },
     {
         id: 3,
-        title: "Data Structures (Ngram Viewer Backend)",
-        description: "Implemented a Java backend for a browser-based tool exploring word usage and hypernym/hyponym history in English texts over 100 years using Google NGram and WordNet datasets.",
-        notebookUrl: "",
-        date: "2023",
-        tags: ["Java", "Data Structures", "NLP"]
+        title: "Data Structures (Algorithms)",
+        description: "Implemented algorithms and data structures: DFS edge classification, closest-pair, and related coursework. Java/Python implementations for graph and geometry problems.",
+        notebookUrl: "projects/aditi-singh---7f56021c/cs170-sp25-coding/hw3/dfs-edge-classification.ipynb",
+        notebookUrls: [
+            { label: "DFS edge classification", url: "projects/aditi-singh---7f56021c/cs170-sp25-coding/hw3/dfs-edge-classification.ipynb" },
+            { label: "Closest pair", url: "projects/aditi-singh---7f56021c/cs170-sp25-coding/hw2/closest-pair.ipynb" }
+        ],
+        date: "2023–2025",
+        tags: ["Algorithms", "Data Structures", "Python"]
     },
     {
         id: 4,
         title: "Email & Movie Classifiers",
         description: "Logistic Regression classifier for spam vs non-spam emails and k-nearest-neighbors classifier to predict whether a movie is comedy or thriller.",
-        notebookUrl: "",
+        notebookUrl: "projects/aditi-singh---7f56021c/Lab10-Movie_lens.ipynb",
         date: "2023",
         tags: ["Data Science", "Logistic Regression", "KNN"]
     }
@@ -140,9 +149,12 @@ const FORMSPREE_GATE_ID = 'YOUR_FORM_ID';
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initEmailGate();
+    loadFolderStack();
     loadProjects();
     loadResume();
     setupSmoothScrolling();
+    setupScrollForResume();
+    setupTimelineReveal();
 });
 
 function initEmailGate() {
@@ -209,7 +221,48 @@ function initEmailGate() {
     });
 }
 
-// Load and display projects
+// Build folder stack on hero (PROJECT 1–4 tabs, beige body with placeholders) — like reference layout
+function loadFolderStack() {
+    const container = document.getElementById('folderStack');
+    if (!container || !projects.length) return;
+
+    const tabsHtml = projects.map((p, i) => {
+        const label = 'PROJECT ' + (i + 1);
+        const active = i === 0 ? ' active' : '';
+        const hasUrl = p.notebookUrl && p.notebookUrl.trim();
+        const url = hasUrl ? '#' : '#';
+        return `<div class="folder-tab${active}" data-index="${i}" data-notebook-url="${hasUrl ? escapeAttr(p.notebookUrl) : ''}" data-notebook-title="${escapeAttr(p.title || '')}"><a href="${url}">${label}</a></div>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div class="folder-tabs">${tabsHtml}</div>
+        <div class="folder-body">
+            <div class="placeholder placeholder-large">your image here</div>
+            <div class="placeholder placeholder-small">your image here</div>
+            <div class="placeholder placeholder-small">your image here</div>
+        </div>
+    `;
+
+    container.querySelectorAll('.folder-tab').forEach((tab, i) => {
+        const link = tab.querySelector('a');
+        const notebookUrl = tab.getAttribute('data-notebook-url');
+        const notebookTitle = tab.getAttribute('data-notebook-title') || ('Project ' + (i + 1));
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (notebookUrl) {
+                openNotebook(notebookUrl, notebookTitle);
+            } else {
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        tab.addEventListener('click', function() {
+            container.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+}
+
+// Load and display projects — cards link to notebooks in projects folder
 function loadProjects() {
     const projectsGrid = document.getElementById('projectsGrid');
     
@@ -223,22 +276,65 @@ function loadProjects() {
     }
 
     projectsGrid.innerHTML = projects.map(project => {
-        const hasNotebook = project.notebookUrl && project.notebookUrl.trim() !== '';
-        const dataAttrs = hasNotebook
-            ? ''
-            : ` data-project-title="${(project.title || '').replace(/"/g, '&quot;')}" data-project-desc="${(project.description || '').replace(/"/g, '&quot;').replace(/\n/g, ' ')}"`;
-        const onClick = hasNotebook
-            ? `openNotebook('${(project.notebookUrl || '').replace(/'/g, "\\'")}', '${(project.title || '').replace(/'/g, "\\'")}')`
-            : 'openProjectDetail(this)';
+        const multiNotebooks = project.notebookUrls && Array.isArray(project.notebookUrls) && project.notebookUrls.length > 0;
+        const hasNotebook = multiNotebooks || (project.notebookUrl && project.notebookUrl.trim() !== '');
+        const dataAttrs = hasNotebook ? '' : ` data-project-title="${escapeAttr(project.title || '')}" data-project-desc="${escapeAttr((project.description || '').replace(/\n/g, ' '))}"`;
+
+        if (multiNotebooks) {
+            const linksHtml = project.notebookUrls.map(n => {
+                const url = (n.url || '').trim();
+                if (!url) return '';
+                return `<a href="${escapeAttr(url)}" class="project-notebook-link" target="_blank" rel="noopener">${escapeHtml(n.label || 'Notebook')}</a>`;
+            }).filter(Boolean).join('');
+            return `
+        <div class="project-card project-card-multi">
+            <div class="project-meta">${escapeHtml(project.date)}</div>
+            <h3 class="project-title">${escapeHtml(project.title)}</h3>
+            <p class="project-description">${escapeHtml(project.description)}</p>
+            <div class="project-notebook-links">${linksHtml}</div>
+            <div class="project-meta">${escapeHtml(project.tags.join(' • '))}</div>
+        </div>
+    `;
+        }
+
+        const isExternalOrIpynb = hasNotebook && (project.notebookUrl.startsWith('http') || project.notebookUrl.endsWith('.ipynb'));
+        const notebookClick = "openNotebook('" + (project.notebookUrl || '').replace(/'/g, "\\'") + "', '" + (project.title || '').replace(/'/g, "\\'") + "')";
+        const notebookKeydown = "if(event.key==='Enter'||event.key===' '){event.preventDefault();" + notebookClick + "}";
+        if (hasNotebook && isExternalOrIpynb) {
+            return `
+        <div class="project-card project-link" onclick="${notebookClick}" onkeydown="${notebookKeydown}" role="button" tabindex="0"${dataAttrs}>
+            <div class="project-meta">${escapeHtml(project.date)}</div>
+            <h3 class="project-title">${escapeHtml(project.title)}</h3>
+            <p class="project-description">${escapeHtml(project.description)}</p>
+            <span class="project-notebook-badge">View notebook</span>
+            <div class="project-meta">${escapeHtml(project.tags.join(' • '))}</div>
+        </div>
+    `;
+        }
+        if (hasNotebook) {
+            return `
+        <div class="project-card" onclick="${notebookClick}" onkeydown="${notebookKeydown}" role="button" tabindex="0">
+            <div class="project-meta">${escapeHtml(project.date)}</div>
+            <h3 class="project-title">${escapeHtml(project.title)}</h3>
+            <p class="project-description">${escapeHtml(project.description)}</p>
+            <span class="project-notebook-badge">View notebook</span>
+            <div class="project-meta">${escapeHtml(project.tags.join(' • '))}</div>
+        </div>
+    `;
+        }
         return `
-        <div class="project-card"${dataAttrs} onclick="${onClick}">
-            <div class="project-meta">${project.date}</div>
-            <h3 class="project-title">${project.title}</h3>
-            <p class="project-description">${project.description}</p>
-            <div class="project-meta">${project.tags.join(' • ')}</div>
+        <div class="project-card"${dataAttrs} onclick="openProjectDetail(this)">
+            <div class="project-meta">${escapeHtml(project.date)}</div>
+            <h3 class="project-title">${escapeHtml(project.title)}</h3>
+            <p class="project-description">${escapeHtml(project.description)}</p>
+            <div class="project-meta">${escapeHtml(project.tags.join(' • '))}</div>
         </div>
     `;
     }).join('');
+}
+
+function escapeAttr(s) {
+    return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function escapeHtml(s) {
@@ -266,27 +362,131 @@ function openProjectDetail(el) {
     });
 }
 
-// Open notebook in modal
+// Open notebook in modal — fetch .ipynb and render Jupyter-style
 function openNotebook(url, title) {
+    const safeTitle = (typeof title === 'string' ? title : '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const modal = document.createElement('div');
     modal.className = 'modal active';
     modal.innerHTML = `
-        <div class="modal-content">
+        <div class="modal-content modal-content-notebook">
             <button class="modal-close" onclick="closeModal(this)">&times;</button>
-            <h2 style="margin-bottom: 2rem; font-size: 1.5rem; font-weight: 500;">${title}</h2>
-            <div class="notebook-viewer">
-                <iframe src="${url}" frameborder="0"></iframe>
+            <div class="notebook-modal-header">
+                <h2 class="notebook-modal-title">${safeTitle}</h2>
+                <a href="${escapeAttr(url)}" class="notebook-download-link" target="_blank" rel="noopener">Download .ipynb</a>
+            </div>
+            <div class="notebook-viewer jp-Notebook" id="notebookViewerRoot">
+                <div class="notebook-loading"><span>Loading notebook…</span></div>
             </div>
         </div>
     `;
     document.body.appendChild(modal);
-    
-    // Close on background click
+
+    const container = modal.querySelector('#notebookViewerRoot');
+    // Resolve URL so it works from any base path and spaces are encoded
+    const fetchUrl = (url && url.startsWith('http')) ? url : new URL(url, window.location.href).href;
+    const isFileProtocol = window.location.protocol === 'file:';
+
+    fetch(fetchUrl)
+        .then(r => { if (!r.ok) throw new Error(r.status + ' ' + r.statusText); return r.json(); })
+        .then(data => {
+            container.innerHTML = '';
+            container.classList.remove('notebook-loading');
+            renderNotebook(container, data);
+        })
+        .catch(err => {
+            let msg = 'Could not load notebook.';
+            if (isFileProtocol) {
+                msg += ' Browsers block loading local files when you open the page from disk (file://). Run a local server in this folder instead, e.g. <code>npx serve</code> or <code>python -m http.server 8000</code>, then open http://localhost:8000';
+            } else {
+                msg += ' The file may be missing or the path is wrong.';
+            }
+            msg += ' You can still <a href="' + escapeAttr(fetchUrl) + '" target="_blank" rel="noopener">open the .ipynb file</a> directly.';
+            container.innerHTML = '<div class="notebook-error">' + msg + '</div>';
+            container.classList.remove('notebook-loading');
+        });
+
     modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeModal(modal.querySelector('.modal-close'));
-        }
+        if (e.target === modal) closeModal(modal.querySelector('.modal-close'));
     });
+}
+
+// Render Jupyter notebook JSON into the container (Jupyter-like cells and outputs)
+function renderNotebook(container, data) {
+    const cells = (data && data.cells) || [];
+    cells.forEach(cell => {
+        const type = (cell.cell_type || 'code').toLowerCase();
+        const source = Array.isArray(cell.source) ? cell.source.join('') : (cell.source || '');
+        if (type === 'markdown') {
+            const mdEl = document.createElement('div');
+            mdEl.className = 'jp-Cell jp-MarkdownCell jp-mod-rendered';
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({ gfm: true, breaks: true });
+                mdEl.innerHTML = '<div class="jp-MarkdownCell-content">' + marked.parse(source) + '</div>';
+            } else {
+                mdEl.innerHTML = '<div class="jp-MarkdownCell-content"><pre>' + escapeHtml(source) + '</pre></div>';
+            }
+            container.appendChild(mdEl);
+            return;
+        }
+        // Code cell
+        const codeEl = document.createElement('div');
+        codeEl.className = 'jp-Cell jp-CodeCell';
+        const execCount = cell.execution_count;
+        const promptHtml = execCount != null
+            ? `<div class="jp-InputPrompt jp-InputArea-prompt">In [${execCount}]:</div>`
+            : '<div class="jp-InputPrompt jp-InputArea-prompt"></div>';
+        let codeHtml = escapeHtml(source);
+        if (typeof hljs !== 'undefined') {
+            try {
+                codeHtml = hljs.highlight(source, { language: 'python' }).value;
+            } catch (_) {}
+        }
+        codeEl.innerHTML = `
+            <div class="jp-Cell-inputWrapper">
+                <div class="jp-InputArea">
+                    ${promptHtml}
+                    <div class="jp-InputArea-editor"><pre><code>${codeHtml}</code></pre></div>
+                </div>
+            </div>
+            ${renderCellOutputs(cell.outputs)}
+        `;
+        container.appendChild(codeEl);
+    });
+    container.querySelectorAll('pre code').forEach(block => {
+        if (typeof hljs !== 'undefined') hljs.highlightElement(block);
+    });
+}
+
+function renderCellOutputs(outputs) {
+    if (!Array.isArray(outputs) || outputs.length === 0) return '';
+    const parts = outputs.map(out => {
+        const ot = out.output_type || '';
+        if (ot === 'stream') {
+            const text = Array.isArray(out.text) ? out.text.join('') : (out.text || '');
+            const name = (out.name || 'stdout').toLowerCase();
+            return `<div class="jp-OutputArea-item"><pre class="jp-Stream jp-${name}">${escapeHtml(text)}</pre></div>`;
+        }
+        if (ot === 'execute_result' || ot === 'display_data') {
+            const data = out.data || {};
+            const html = data['text/html'];
+            const plain = data['text/plain'];
+            const png = data['image/png'];
+            const toStr = x => (Array.isArray(x) ? x.join('') : (typeof x === 'string' ? x : ''));
+            if (html && toStr(html)) {
+                return `<div class="jp-OutputArea-item"><div class="jp-Output-output">${toStr(html)}</div></div>`;
+            }
+            if (plain && toStr(plain)) {
+                return `<div class="jp-OutputArea-item"><pre class="jp-Output-output">${escapeHtml(toStr(plain))}</pre></div>`;
+            }
+            if (png) {
+                const b64 = toStr(png);
+                if (b64) return `<div class="jp-OutputArea-item"><img src="data:image/png;base64,${b64}" alt="output" class="jp-Output-img"/></div>`;
+            }
+        }
+        return '';
+    }).filter(Boolean);
+    if (parts.length === 0) return '';
+    return `<div class="jp-Cell-outputWrapper"><div class="jp-OutputArea"><div class="jp-OutputArea-prompt">Out[ ]:</div>${parts.join('')}</div></div>`;
 }
 
 // Close modal
@@ -401,8 +601,8 @@ function loadResume() {
 
     let boxesHTML = '';
     let marksHTML = '';
-    const experienceColors = ['#0a0a0a', '#141414', '#1a1a1a'];
-    const educationColors = ['#0a0a0a', '#141414', '#1a1a1a'];
+    const experienceColors = ['#0f172a', '#1e293b', '#334155'];
+    const educationColors = ['#0f172a', '#1e293b', '#334155'];
 
     allItems.forEach((item, idx) => {
         const se = getStartEnd(item);
@@ -431,18 +631,29 @@ function loadResume() {
             <div class="timeline-company">${isExperience ? item.company : item.institution}</div>
             <div class="timeline-date">${dateLabel}</div>
         `;
+        const isBerkeley = (item.institution || '').toLowerCase().includes('berkeley');
+        const relIdx = item.achievements ? item.achievements.indexOf('Relevant courses:') : -1;
+        const courses = isBerkeley && relIdx >= 0 && item.achievements ? item.achievements.slice(relIdx + 1) : [];
+        const achievementsForBody = item.achievements && item.achievements.length > 0
+            ? (isBerkeley && relIdx >= 0 ? item.achievements.slice(0, relIdx) : item.achievements)
+            : [];
         const body = `
             <div class="timeline-location">${item.location}</div>
             <p class="timeline-description">${item.description}</p>
-            ${item.achievements && item.achievements.length > 0 ? `<ul class="timeline-achievements">${item.achievements.map((a) => `<li>${a}</li>`).join('')}</ul>` : ''}
+            ${achievementsForBody.length > 0 ? `<ul class="timeline-achievements">${achievementsForBody.map((a) => `<li>${a}</li>`).join('')}</ul>` : ''}
         `;
 
+        const coursesTooltip = courses.length > 0
+            ? `<div class="timeline-courses-tooltip" aria-label="Relevant courses"><span class="timeline-courses-tooltip-title">Relevant courses</span><ul class="timeline-courses-list">${courses.map((c) => `<li>${escapeHtml(c)}</li>`).join('')}</ul></div>`
+            : '';
+
         boxesHTML += `
-            <div class="timeline-box timeline-box-${isExperience ? 'left' : 'right'}" 
+            <div class="timeline-box timeline-box-${isExperience ? 'left' : 'right'}${isBerkeley ? ' timeline-box-berkeley' : ''}" 
                  style="top: ${topPct}%; bottom: ${bottomPct}%; left: ${leftPct}%; width: ${laneWidth}%; --box-color: ${color};">
                 <div class="timeline-box-inner">
                     <div class="timeline-box-header">${header}</div>
                     <div class="timeline-box-body">${body}</div>
+                    ${coursesTooltip}
                 </div>
             </div>
         `;
@@ -471,6 +682,32 @@ function setupSmoothScrolling() {
             }
         });
     });
+}
+
+// Scroll-for-resume button: smooth scroll to #resume (same style as click me)
+function setupScrollForResume() {
+    const btn = document.getElementById('scrollResumeBtn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+        const resume = document.getElementById('resume');
+        if (resume) {
+            resume.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+}
+
+// Timeline: reveal when scrolled into view
+function setupTimelineReveal() {
+    const container = document.getElementById('timelineContainer');
+    if (!container) return;
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { rootMargin: '0px 0px -80px 0px', threshold: 0.1 });
+    observer.observe(container);
 }
 
 // Export functions for global access
