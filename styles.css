@@ -37,7 +37,7 @@
 }
 
 body {
-    font-family: 'Oswald', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
     color: var(--white);
     background-color: var(--black);
@@ -60,11 +60,11 @@ body {
 
 .nav .logo,
 .nav .nav-link {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--black);
     text-decoration: none;
 }
@@ -141,6 +141,25 @@ body {
 
 main {
     margin-top: 52px;
+}
+
+/* Live layout: simple centered hero (matches index.html) */
+.hero {
+    padding: 5.5rem 2rem 2rem;
+    background-color: var(--black);
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: clamp(2.75rem, 5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    color: var(--white);
 }
 
 /* Two-column main: left = big title + bio, right = CLICK ME + folders */
@@ -298,7 +317,7 @@ main {
 
 .hero-subtitle {
     font-size: 1.125rem;
-    color: var(--hotpink-muted);
+    color: var(--light-gray);
     font-weight: 400;
     letter-spacing: 0.01em;
 }
@@ -310,12 +329,12 @@ main {
 }
 
 .section-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.5rem;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1.6rem;
     font-weight: 600;
     margin-bottom: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: -0.01em;
     color: var(--white);
 }
 
