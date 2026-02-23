@@ -1,0 +1,3 @@
+# Place your converted Jupyter notebook HTML files here
+# To convert a Jupyter notebook to HTML:
+# jupyter nbconvert --to html your_notebook.ipynb --output-dir=projects

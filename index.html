@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditi Singh</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">aditisingh.xyz</a>
+            <div class="nav-links">
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#resume" class="nav-link">Resume</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="mainContent">
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Aditi Singh</h1>
+                <p class="hero-subtitle">Data Science &amp; Machine Learning · UC Berkeley &amp; CU Boulder</p>
+            </div>
+        </section>
+
+        <section id="projects" class="projects">
+            <div class="container">
+                <h2 class="section-title">Machine Learning Projects</h2>
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- Projects will be loaded dynamically -->
+                    <div class="project-placeholder">
+                        <p>Loading projects...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resume" class="resume">
+            <div class="container">
+                <h2 class="section-title">Resume <a href="Resume-AditiSingh.pdf" target="_blank" rel="noopener" class="resume-dl">(PDF)</a></h2>
+                <div class="timeline-container" id="timelineContainer">
+                    <!-- Timeline will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="about-content">
+                    <p>I'm a Data Science and ML-focused engineer with a B.S. in Data Science from UC Berkeley (Class of 2025) and an M.S. in Computer Science with an AI certificate from the University of Colorado Boulder (Class of 2027). I've worked on LLM/RAG systems, agent platforms, and research on leveraging LLMs for early detection of ADHD at CITRIS. I build with Python, React, LangChain, PyTorch, and cloud tools.</p>
+                    <p style="margin-top: 1rem;">Contact: <a href="mailto:singhaditi@live.com">singhaditi@live.com</a> · +1 (720) 206-8865 · <a href="https://www.linkedin.com/in/singhaditi21/" target="_blank" rel="noopener">LinkedIn</a> · US Citizen</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Email gate: required to view site. Submissions go to Formspree (see script.js). -->
+    <div id="emailGate" class="email-gate" aria-hidden="false">
+        <div class="email-gate-content">
+            <h1 class="email-gate-title">aditisingh.xyz</h1>
+            <p class="email-gate-subtitle">Enter your email to continue</p>
+            <form id="emailGateForm" class="email-gate-form">
+                <input type="email" id="gateEmail" name="email" placeholder="you@example.com" required autocomplete="email">
+                <button type="submit" class="submit-btn">Continue</button>
+            </form>
+            <p id="gateMessage" class="gate-message"></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 aditisingh.xyz</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
