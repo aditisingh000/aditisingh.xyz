@@ -1,70 +1,28 @@
-# Quick Start Guide
+# Quick overview for recruiters and visitors
 
-Get your website up and running in 5 minutes!
+This repo is the source for **aditisingh.xyz** — a personal portfolio site built with plain HTML, CSS, and JavaScript.
 
-## Step 1: Open the Website Locally
+## What you’re looking at
 
-Simply open `index.html` in your web browser to see your website.
+- **One-page site:** Hero, ML projects, resume timeline, about, and contact. Everything is in this repo; no separate backend.
+- **Content in code:** Resume and project entries live in `script.js` (`resumeData` and `projects`). The HTML is mostly structure; the JS renders the timeline and project cards. That keeps updates in one place and the structure easy to follow.
+- **No build step:** You can open `index.html` in a browser or run any static file server from the project root to view the site. No `npm install` or build required.
 
-## Step 2: Add Your Projects
+## Features at a glance
 
-1. Convert your Jupyter notebooks to HTML:
-   ```bash
-   jupyter nbconvert --to html path/to/your/notebook.ipynb --output-dir=projects
-   ```
+| Feature | Where it lives | What it does |
+|--------|----------------|--------------|
+| Resume timeline | `script.js` → `resumeData` | Experience (left) and education (right); responsive, PDF link in section header |
+| Projects | `script.js` → `projects` | Cards with title, description, tags, date; optional link to notebook HTML |
+| Email gate | `script.js` → `initEmailGate()` | Optional first-visit email prompt; Formspree if configured, else still unlocks |
+| Contact form | `index.html` + `script.js` | Standard form; can be wired to Formspree or another endpoint |
+| Styling | `styles.css` | Layout, typography (Inter), CSS variables, responsive breakpoints |
 
-2. Edit `script.js` and update the `projects` array with your actual projects:
-   ```javascript
-   const projects = [
-       {
-           id: 1,
-           title: "My ML Project",
-           description: "Description of what this project does",
-           notebookUrl: "projects/your-notebook.html",
-           date: "2025-01",
-           tags: ["Machine Learning", "Python"]
-       }
-   ];
-   ```
+## Design choices (train of thought)
 
-## Step 3: Set Up Email (Optional but Recommended)
+- **Minimal stack** — No React/Vue/etc., so the code is quick to skim and run. Good for recruiters who want to see structure and intent without digging through a build pipeline.
+- **Data-driven UI** — Changing resume or projects means editing the arrays in `script.js`, not scattered HTML. Clear separation between data and presentation.
+- **Progressive behavior** — Email gate and Formspree are optional; the site works and unlocks even if they’re not configured. No hard dependency on external services to view the portfolio.
+- **Readable structure** — Comments in `script.js` mark sections (resume, projects, email gate, etc.); `styles.css` is organized by page section so it’s obvious what styles what.
 
-Choose one method from `email-config.md`:
-
-- **EmailJS** (easiest, no backend needed)
-- **Formspree** (simple form backend)
-- **Google Analytics** (just for tracking)
-
-## Step 4: Customize Content
-
-- Edit the hero section in `index.html` (line ~30)
-- Update the about section (line ~50)
-- Modify colors in `styles.css` (line ~8)
-
-## Step 5: Deploy
-
-### Option A: GitHub Pages (Free)
-1. Create a GitHub repository
-2. Push your files
-3. Go to Settings > Pages > Enable GitHub Pages
-4. Your site is live!
-
-### Option B: Netlify (Free, Easy)
-1. Go to [netlify.com](https://www.netlify.com/)
-2. Drag and drop your folder
-3. Done!
-
-### Option C: Your Own Domain (aditisingh.xyz)
-1. After deploying to GitHub Pages/Netlify
-2. Add your custom domain in the hosting settings
-3. Update DNS records at your domain registrar
-
-## That's It!
-
-Your minimalist portfolio website is ready. The design is inspired by 032c.com with a clean, professional look perfect for showcasing your ML projects.
-
-## Need Help?
-
-- See `README.md` for detailed instructions
-- See `email-config.md` for email setup
-- Check the comments in the code files
+For more detail (file structure, how to run locally, deployment), see **README.md**.
