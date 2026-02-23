@@ -6,7 +6,7 @@ const resumeData = {
             title: "Software Engineering Intern",
             company: "Ozcorp Scientific",
             location: "Remote",
-            startDate: "2025-01",
+            startDate: "2025-12",
             endDate: "Present",
             description: "Designing and developing a meta-agent platform and agents for recruitment, research, and CRM workflows.",
             achievements: [
@@ -21,7 +21,7 @@ const resumeData = {
             title: "Software Engineer",
             company: "Mercor",
             location: "Remote",
-            startDate: "2024-09",
+            startDate: "2026-02",
             endDate: "Present",
             description: "LLM supervised fine-tuning for coding and debugging assistance.",
             achievements: [
@@ -79,7 +79,20 @@ const resumeData = {
             description: "Class of 2025.",
             achievements: [
                 "CDSS Award of Excellence for Large Language Modeling Innovation (May 2025)",
-                "Relevant courses: Data Structures, ML I & II, NLP, AI, Data Science, Data Engineering, Efficient Algorithms"
+                "Relevant courses:",
+                "Data Structures",
+                "Machine Learning I",
+                "Machine Learning II",
+                "Natural Language Processing",
+                "Artificial Intelligence",
+                "Data Science",
+                "Data Engineering",
+                "Efficient Algorithms",
+                "Foundations of Data Science",
+                "Probability",
+                "Statistics",
+                "Linear Algebra",
+                "Database Systems"
             ]
         }
     ]
@@ -244,7 +257,7 @@ function openProjectDetail(el) {
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal(this)">&times;</button>
             <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 500;">${title}</h2>
-            <p style="line-height: 1.7; color: #666;">${description}</p>
+            <p style="line-height: 1.7; color: var(--hotpink-muted);">${description}</p>
         </div>
     `;
     document.body.appendChild(modal);
@@ -292,9 +305,32 @@ function getDurationMonths(startDate, endDate) {
     return Math.max(1, months); // at least 1 month so short stints still have a visible box
 }
 
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+function formatDatePart(ym) {
+    if (!ym || ym === 'Present') return 'Present';
+    const [y, m] = String(ym).split('-').map(Number);
+    if (!m || m < 1 || m > 12) return ym;
+    return `${MONTH_NAMES[m - 1]} ${y}`;
+}
+
+function formatDateRange(startDate, endDate) {
+    return `${formatDatePart(startDate)} – ${formatDatePart(endDate)}`;
+}
+
+// For "Present" roles, use a display end date so box height reflects relative length (e.g. Ozcorp bigger than Mercor).
+function getDisplayEndDate(item) {
+    if (item.endDate !== 'Present') return item.endDate;
+    const company = (item.company || item.institution || '').toLowerCase();
+    if (company.includes('ozcorp')) return '2026-12';  // Ozcorp: show as ~12 months
+    if (company.includes('mercor')) return '2026-12';  // Mercor: bigger box
+    return new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+}
+
 function getStartEnd(item) {
     const start = new Date(item.startDate);
-    const end = item.endDate === 'Present' ? new Date() : new Date(item.endDate);
+    const endDateStr = getDisplayEndDate(item);
+    const end = endDateStr === 'Present' ? new Date() : new Date(endDateStr);
     return { start: start.getTime(), end: end.getTime() };
 }
 
@@ -304,61 +340,31 @@ function overlaps(itemA, itemB) {
     return a.start < b.end && a.end > b.start;
 }
 
-// Union-find: group items that overlap (transitively). Returns array of groups (each group = array of items).
-function buildOverlapGroups(items) {
-    const n = items.length;
-    const parent = items.map((_, i) => i);
-    function find(i) {
-        if (parent[i] !== i) parent[i] = find(parent[i]);
-        return parent[i];
-    }
-    function union(i, j) {
-        parent[find(i)] = find(j);
-    }
-    for (let i = 0; i < n; i++) {
-        for (let j = i + 1; j < n; j++) {
-            if (overlaps(items[i], items[j])) union(i, j);
-        }
-    }
-    const groupByRoot = new Map();
-    items.forEach((item, i) => {
-        const r = find(i);
-        if (!groupByRoot.has(r)) groupByRoot.set(r, []);
-        groupByRoot.get(r).push(item);
+// Assign lane (0, 1, 2...) per side so overlapping items get different lanes. Returns max lane count for that side.
+function assignLanes(items, sideKey) {
+    const sideItems = items.filter((i) => i.type === sideKey).sort((a, b) => getStartEnd(a).start - getStartEnd(b).start);
+    const laneEnds = [];
+    sideItems.forEach((item) => {
+        const se = getStartEnd(item);
+        let lane = 0;
+        while (lane < laneEnds.length && laneEnds[lane] > se.start) lane++;
+        if (lane === laneEnds.length) laneEnds.push(se.end);
+        else laneEnds[lane] = Math.max(laneEnds[lane], se.end);
+        item.lane = lane;
     });
-    return Array.from(groupByRoot.values());
+    return laneEnds.length;
 }
 
-function renderTimelineContent(item, durationRatio, maxMonths) {
-    const isExperience = item.type === 'experience';
-    const durationStyle = `--duration-ratio: ${durationRatio};`;
-    return `
-        <div class="timeline-content" style="${durationStyle}">
-            <div class="timeline-date">${item.startDate} - ${item.endDate}</div>
-            <h3 class="timeline-title">${isExperience ? item.title : item.degree}</h3>
-            <div class="timeline-company">${isExperience ? item.company : item.institution}</div>
-            <div class="timeline-location">${item.location}</div>
-            <p class="timeline-description">${item.description}</p>
-            ${item.achievements && item.achievements.length > 0 ? `
-                <ul class="timeline-achievements">
-                    ${item.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
-                </ul>
-            ` : ''}
-        </div>
-    `;
-}
-
-// Load and display resume timeline (concurrent items shown side by side like Google Calendar)
+// Load and display resume timeline: time on vertical axis, year labels, boxes positioned by date (Gantt/calendar style)
 function loadResume() {
     const timelineContainer = document.getElementById('timelineContainer');
-    
     if (!timelineContainer) return;
-    
+
     const allItems = [
-        ...resumeData.experience.map(item => ({ ...item, type: 'experience' })),
-        ...resumeData.education.map(item => ({ ...item, type: 'education' }))
+        ...resumeData.experience.map((item) => ({ ...item, type: 'experience' })),
+        ...resumeData.education.map((item) => ({ ...item, type: 'education' }))
     ];
-    
+
     if (allItems.length === 0) {
         timelineContainer.innerHTML = `
             <div class="timeline-placeholder">
@@ -367,58 +373,88 @@ function loadResume() {
         `;
         return;
     }
-    
-    const itemsWithDuration = allItems.map(item => ({
-        ...item,
-        durationMonths: getDurationMonths(item.startDate, item.endDate)
-    }));
-    const maxMonths = Math.max(...itemsWithDuration.map(i => i.durationMonths));
-    
-    const groups = buildOverlapGroups(itemsWithDuration);
-    // Sort groups by latest end date in group (most recent first)
-    groups.sort((ga, gb) => {
-        const maxEnd = (g) => Math.max(...g.map(i => getStartEnd(i).end));
-        return maxEnd(gb) - maxEnd(ga);
+
+    const rangeStart = Math.min(...allItems.map((i) => getStartEnd(i).start));
+    const rangeEnd = Math.max(...allItems.map((i) => getStartEnd(i).end));
+    const rangeMs = rangeEnd - rangeStart;
+
+    const leftLaneCount = assignLanes(allItems, 'experience');
+    const rightLaneCount = assignLanes(allItems, 'education');
+
+    const TIMELINE_HEIGHT_PX = 900;
+    const getTopPct = (endMs) => ((rangeEnd - endMs) / rangeMs) * 100;
+    const getBottomPct = (startMs) => 100 - ((rangeEnd - startMs) / rangeMs) * 100;
+    const MIN_BOX_HEIGHT_PCT = 10;  // Big enough to show title, company, and date
+
+    const years = [];
+    const yStart = new Date(rangeStart).getFullYear();
+    const yEnd = new Date(rangeEnd).getFullYear();
+    for (let y = yStart; y <= yEnd; y++) years.push(y);
+
+    let axisHTML = '<div class="timeline-axis-labels">';
+    years.forEach((y) => {
+        const midYear = new Date(y, 5, 15).getTime();
+        const topPct = getTopPct(midYear);
+        axisHTML += `<div class="timeline-year" style="top: ${topPct}%">${y}</div>`;
     });
-    
-    let timelineHTML = '<div class="timeline">';
-    
-    groups.forEach((group) => {
-        if (group.length === 1) {
-            const item = group[0];
-            const isExperience = item.type === 'experience';
-            const side = isExperience ? 'left' : 'right';
-            const durationRatio = item.durationMonths / maxMonths;
-            timelineHTML += `
-                <div class="timeline-item ${side}">
-                    ${renderTimelineContent(item, durationRatio, maxMonths)}
-                    <div class="timeline-marker"></div>
-                </div>
-            `;
-            return;
+    axisHTML += '</div>';
+
+    let boxesHTML = '';
+    let marksHTML = '';
+    const experienceColors = ['#0a0a0a', '#141414', '#1a1a1a'];
+    const educationColors = ['#0a0a0a', '#141414', '#1a1a1a'];
+
+    allItems.forEach((item, idx) => {
+        const se = getStartEnd(item);
+        let topPct = getTopPct(se.end);
+        let bottomPct = getBottomPct(se.start);
+        const company = (item.company || item.institution || '').toLowerCase();
+        const minHeight = company.includes('modivcare') ? 14 : MIN_BOX_HEIGHT_PCT;  // Modivcare: bigger box so text shows
+        let heightPct = 100 - topPct - bottomPct;
+        if (heightPct < minHeight) {
+            topPct = 100 - bottomPct - minHeight;
         }
-        // Concurrent row: side-by-side like Google Calendar
-        const leftItems = group.filter(i => i.type === 'experience');
-        const rightItems = group.filter(i => i.type === 'education');
-        timelineHTML += '<div class="timeline-row">';
-        timelineHTML += '<div class="timeline-row-side timeline-row-left">';
-        leftItems.forEach((item) => {
-            const durationRatio = item.durationMonths / maxMonths;
-            timelineHTML += renderTimelineContent(item, durationRatio, maxMonths);
-        });
-        timelineHTML += '</div>';
-        timelineHTML += '<div class="timeline-marker"></div>';
-        timelineHTML += '<div class="timeline-row-side timeline-row-right">';
-        rightItems.forEach((item) => {
-            const durationRatio = item.durationMonths / maxMonths;
-            timelineHTML += renderTimelineContent(item, durationRatio, maxMonths);
-        });
-        timelineHTML += '</div>';
-        timelineHTML += '</div>';
+        const isExperience = item.type === 'experience';
+        const lane = item.lane ?? 0;
+        const laneCount = isExperience ? leftLaneCount : rightLaneCount;
+        const halfWidth = 48;
+        const laneWidth = halfWidth / Math.max(1, laneCount);
+        const leftPct = isExperience ? lane * laneWidth : (100 - halfWidth) + lane * laneWidth;
+        const color = isExperience ? experienceColors[lane % experienceColors.length] : educationColors[lane % educationColors.length];
+
+        const startMarkTopPct = 100 - bottomPct;
+        marksHTML += `<div class="timeline-start-mark" style="top: ${startMarkTopPct}%" aria-hidden="true"></div>`;
+
+        const dateLabel = formatDateRange(item.startDate, item.endDate);
+        const header = `
+            <h3 class="timeline-title">${isExperience ? item.title : item.degree}</h3>
+            <div class="timeline-company">${isExperience ? item.company : item.institution}</div>
+            <div class="timeline-date">${dateLabel}</div>
+        `;
+        const body = `
+            <div class="timeline-location">${item.location}</div>
+            <p class="timeline-description">${item.description}</p>
+            ${item.achievements && item.achievements.length > 0 ? `<ul class="timeline-achievements">${item.achievements.map((a) => `<li>${a}</li>`).join('')}</ul>` : ''}
+        `;
+
+        boxesHTML += `
+            <div class="timeline-box timeline-box-${isExperience ? 'left' : 'right'}" 
+                 style="top: ${topPct}%; bottom: ${bottomPct}%; left: ${leftPct}%; width: ${laneWidth}%; --box-color: ${color};">
+                <div class="timeline-box-inner">
+                    <div class="timeline-box-header">${header}</div>
+                    <div class="timeline-box-body">${body}</div>
+                </div>
+            </div>
+        `;
     });
-    
-    timelineHTML += '</div>';
-    timelineContainer.innerHTML = timelineHTML;
+
+    timelineContainer.innerHTML = `
+        <div class="timeline timeline-axis" style="--timeline-height: ${TIMELINE_HEIGHT_PX}px">
+            ${axisHTML}
+            <div class="timeline-axis-line">${marksHTML}</div>
+            ${boxesHTML}
+        </div>
+    `;
 }
 
 // Smooth scrolling for navigation links
