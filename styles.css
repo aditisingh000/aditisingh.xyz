@@ -182,7 +182,7 @@ main {
     color: var(--gray);
 }
 
-/* Email gate: full-screen overlay until visitor enters email */
+/* Email gate: full-screen overlay until user enters email */
 .email-gate {
     position: fixed;
     inset: 0;

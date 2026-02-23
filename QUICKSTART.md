@@ -1,4 +1,4 @@
-# Quick overview for recruiters and visitors
+# Quick overview
 
 This repo is the source for **aditisingh.xyz** — a personal portfolio site built with plain HTML, CSS, and JavaScript.
 
@@ -20,7 +20,7 @@ This repo is the source for **aditisingh.xyz** — a personal portfolio site bui
 
 ## Design choices (train of thought)
 
-- **Minimal stack** — No React/Vue/etc., so the code is quick to skim and run. Good for recruiters who want to see structure and intent without digging through a build pipeline.
+- **Minimal stack** — No React/Vue/etc.; the code is quick to skim and run. Structure and intent are easy to see without digging through a build pipeline.
 - **Data-driven UI** — Changing resume or projects means editing the arrays in `script.js`, not scattered HTML. Clear separation between data and presentation.
 - **Progressive behavior** — Email gate and Formspree are optional; the site works and unlocks even if they’re not configured. No hard dependency on external services to view the portfolio.
 - **Readable structure** — Comments in `script.js` mark sections (resume, projects, email gate, etc.); `styles.css` is organized by page section so it’s obvious what styles what.

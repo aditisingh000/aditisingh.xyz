@@ -13,14 +13,14 @@ Personal portfolio site: ML projects, resume timeline, and contact. Built with p
 
 - **Resume timeline** — Experience and education are defined in `resumeData` in `script.js` and rendered as a two-column timeline (experience left, education right). On small screens it collapses to one column. PDF link to the main resume is in the Resume section.
 - **Projects** — The `projects` array in `script.js` drives the project cards. Each item can have a `notebookUrl` (opens in a modal or new context) or be description-only. Tags and dates are shown on the cards.
-- **Email gate (optional)** — First-time visitors can be prompted for an email before seeing the main content. Submission is wired to Formspree when a form ID is set; access is remembered in `sessionStorage` for the tab. If no form ID is configured, the gate still unlocks so the site is always viewable.
+- **Email gate (optional)** — First-time users can be prompted for an email before seeing the main content. Submission is wired to Formspree when a form ID is set; access is remembered in `sessionStorage` for the tab. If no form ID is configured, the gate still unlocks so the site is always viewable.
 - **Contact form** — Standard contact form; can be hooked to Formspree or another backend via the form action or script.
 - **Responsive** — Layout and nav are tuned for desktop and mobile; the timeline and project grid adapt.
 
 ## Design and structure (train of thought)
 
 - **Single data source** — Resume and project content live in `script.js` so updating the site is mostly editing data, not hunting through HTML. That keeps the HTML minimal and the logic visible.
-- **No build step** — Open `index.html` or serve the folder to view the site. No bundler or framework, so recruiters and reviewers can run it locally without installing anything.
+- **No build step** — Open `index.html` or serve the folder to view the site. No bundler or framework; run it locally without installing anything.
 - **Readable code** — Sections in `script.js` are commented (resume data, projects, email gate, etc.). Styling is organized by section in `styles.css` so it’s clear what affects what.
 - **Lightweight** — No heavy dependencies; fonts loaded from Google Fonts. Suited for quick loads and simple hosting (e.g. GitHub Pages, Netlify, or any static host).
 
@@ -34,7 +34,7 @@ aditisingh.xyz/
 ├── projects/           # Optional notebook HTML files
 ├── Resume-AditiSingh.pdf
 ├── README.md
-└── QUICKSTART.md       # Short overview for visitors and recruiters
+└── QUICKSTART.md       # Short overview
 ```
 
 ## Viewing the site
