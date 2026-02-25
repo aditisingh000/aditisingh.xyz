@@ -605,6 +605,11 @@ function loadResume() {
     const getBottomPct = (startMs) => 100 - ((rangeEnd - startMs) / rangeMs) * 100;
     const MIN_BOX_HEIGHT_PCT = 10;  // Big enough to show title, company, and date
 
+    // Left side 0–46%, axis 50%, right side 56–100% so dates/labels don't overlap boxes
+    const LEFT_HALF = 46;
+    const RIGHT_START = 56;
+    const RIGHT_HALF = 100 - RIGHT_START; // 44
+
     const years = [];
     const yStart = new Date(rangeStart).getFullYear();
     const yEnd = new Date(rangeEnd).getFullYear();
@@ -620,6 +625,7 @@ function loadResume() {
 
     let boxesHTML = '';
     let marksHTML = '';
+    let tickLinesHTML = '';
     const experienceColors = ['#0f172a', '#1e293b', '#334155'];
     const educationColors = ['#0f172a', '#1e293b', '#334155'];
 
@@ -636,13 +642,21 @@ function loadResume() {
         const isExperience = item.type === 'experience';
         const lane = item.lane ?? 0;
         const laneCount = isExperience ? leftLaneCount : rightLaneCount;
-        const halfWidth = 48;
-        const laneWidth = halfWidth / Math.max(1, laneCount);
-        const leftPct = isExperience ? lane * laneWidth : (100 - halfWidth) + lane * laneWidth;
+        const isWideOnly = company.includes('modivcare') || company.includes('citris');
+        const halfWidth = isExperience ? LEFT_HALF : RIGHT_HALF;
+        const laneWidth = isWideOnly ? halfWidth : halfWidth / Math.max(1, laneCount);
+        const leftPct = isExperience
+            ? (isWideOnly ? 0 : lane * (LEFT_HALF / Math.max(1, laneCount)))
+            : (isWideOnly ? RIGHT_START : RIGHT_START + lane * (RIGHT_HALF / Math.max(1, laneCount)));
         const color = isExperience ? experienceColors[lane % experienceColors.length] : educationColors[lane % educationColors.length];
 
         const startMarkTopPct = 100 - bottomPct;
         marksHTML += `<div class="timeline-start-mark" style="top: ${startMarkTopPct}%" aria-hidden="true"></div>`;
+
+        // Tick line from axis (50%) to box at start date
+        const tickLeftPct = isExperience ? leftPct + laneWidth : 50;
+        const tickWidthPct = isExperience ? 50 - (leftPct + laneWidth) : leftPct - 50;
+        tickLinesHTML += `<div class="timeline-tick-line" style="top: ${startMarkTopPct}%; left: ${tickLeftPct}%; width: ${tickWidthPct}%;" aria-hidden="true"></div>`;
 
         const dateLabel = formatDateRange(item.startDate, item.endDate);
         const header = `
@@ -668,7 +682,7 @@ function loadResume() {
 
         boxesHTML += `
             <div class="timeline-box timeline-box-${isExperience ? 'left' : 'right'}${isBerkeley ? ' timeline-box-berkeley' : ''}" 
-                 style="top: ${topPct}%; bottom: ${bottomPct}%; left: ${leftPct}%; width: ${laneWidth}%; --box-color: ${color};">
+                 style="top: ${topPct}%; bottom: ${bottomPct}%; left: ${leftPct}%; width: ${laneWidth}%; --box-color: ${color}; --lane-width-pct: ${laneWidth};">
                 <div class="timeline-box-inner">
                     <div class="timeline-box-header">${header}</div>
                     <div class="timeline-box-body">${body}</div>
@@ -680,8 +694,11 @@ function loadResume() {
 
     timelineContainer.innerHTML = `
         <div class="timeline timeline-axis" style="--timeline-height: ${TIMELINE_HEIGHT_PX}px">
+            <div class="timeline-side-label timeline-side-label-left">Experience</div>
+            <div class="timeline-side-label timeline-side-label-right">Education</div>
             ${axisHTML}
             <div class="timeline-axis-line">${marksHTML}</div>
+            <div class="timeline-tick-lines">${tickLinesHTML}</div>
             ${boxesHTML}
         </div>
     `;
