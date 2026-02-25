@@ -5,15 +5,15 @@
 }
 
 :root {
-    /* Purple-forward palette — dark UI with white text and purple→pink accents */
-    --black: #05010a;
-    --black-mid: #12051f;
-    --black-light: #3b225a;
-    --teal: #7c3aed;          /* repurposed as primary purple */
-    --teal-bright: #a855f7;   /* bright purple */
-    --teal-soft: #c084fc;     /* soft lavender */
-    --teal-muted: #db68c7;    /* purple-leaning pink */
-    /* Semantic aliases (now purple-dominant) */
+    /* Sepia palette — warm, paper-like, readable */
+    --black: #2b2119;
+    --black-mid: #3b2a20;
+    --black-light: #6b4f3a;
+    --teal: #a26a3c;
+    --teal-bright: #d89b5c;
+    --teal-soft: #c58b4e;
+    --teal-muted: #8a5c30;
+    /* Semantic aliases (all warmed to sepia tones) */
     --neon-pink: var(--teal);
     --neon-pink-bright: var(--teal-bright);
     --neon-pink-glow: var(--teal-soft);
@@ -24,16 +24,16 @@
     --hotpink-muted: var(--teal-muted);
     --bg-dark: var(--black);
     --bg-mid: var(--black-mid);
-    --white: #f9f7ff;
+    --white: #f7eddd;
     --gray: var(--black-light);
-    --light-gray: #c4b5fd;
+    --light-gray: #8c6f57;
     --border: var(--teal-soft);
     --accent: var(--teal);
     --accent-hover: var(--teal-bright);
-    --folder-beige: #18102a;
-    --folder-beige-active: #231735;
-    --folder-placeholder: #3b225a;
-    --folder-placeholder-text: #e9d5ff;
+    --folder-beige: #f5e7d2;
+    --folder-beige-active: #e7d3b8;
+    --folder-placeholder: #d5bda0;
+    --folder-placeholder-text: #7d6247;
 }
 
 body {
@@ -41,9 +41,6 @@ body {
     font-weight: 400;
     color: var(--white);
     background-color: var(--black);
-    background-image:
-        radial-gradient(circle at 0% 0%, rgba(124, 58, 237, 0.35), transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(219, 104, 199, 0.25), transparent 60%);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -960,22 +957,18 @@ main.content-hidden {
 
 /* Education boxes with relevant courses: show all courses in a tooltip on hover */
 .timeline-courses-tooltip {
-    max-height: 0;
     opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease 0.05s;
     margin-top: 0;
     flex-shrink: 0;
+    transition: opacity 0.3s ease 0.05s;
 }
 
 .timeline-box:hover .timeline-courses-tooltip {
-    max-height: 420px;
     opacity: 1;
-    overflow-y: auto;
     margin-top: 0.4rem;
     padding-top: 0.5rem;
     border-top: 1px solid var(--hotpink-dark);
-    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s, opacity 0.28s ease 0.02s;
+    transition: opacity 0.28s ease 0.02s;
 }
 
 .timeline-courses-tooltip-title {
