@@ -5,15 +5,16 @@
 }
 
 :root {
-    /* Sepia palette — warm, paper-like, readable */
+    /* Palette: deep brown base + teal accents */
     --black: #2b2119;
     --black-mid: #3b2a20;
     --black-light: #6b4f3a;
-    --teal: #a26a3c;
-    --teal-bright: #d89b5c;
-    --teal-soft: #c58b4e;
-    --teal-muted: #8a5c30;
-    /* Semantic aliases (all warmed to sepia tones) */
+    /* Teal family (cool, green-blue) */
+    --teal: #0f766e;          /* primary accent */
+    --teal-bright: #14b8a6;   /* buttons, hovers */
+    --teal-soft: #22cbbb;     /* borders, highlights */
+    --teal-muted: #e0f7f4;    /* body text on dark bg */
+    /* Semantic aliases mapped to teal */
     --neon-pink: var(--teal);
     --neon-pink-bright: var(--teal-bright);
     --neon-pink-glow: var(--teal-soft);
@@ -24,16 +25,16 @@
     --hotpink-muted: var(--teal-muted);
     --bg-dark: var(--black);
     --bg-mid: var(--black-mid);
-    --white: #f7eddd;
+    --white: #fdf7ec;
     --gray: var(--black-light);
-    --light-gray: #8c6f57;
+    --light-gray: #b69575;
     --border: var(--teal-soft);
     --accent: var(--teal);
     --accent-hover: var(--teal-bright);
     --folder-beige: #f5e7d2;
     --folder-beige-active: #e7d3b8;
     --folder-placeholder: #d5bda0;
-    --folder-placeholder-text: #7d6247;
+    --folder-placeholder-text: #4b3320;
 }
 
 body {
