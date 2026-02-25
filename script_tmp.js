@@ -76,7 +76,7 @@ const resumeData = {
         },
         {
             id: 2,
-            degree: "Bachelor's in Data Science (Major, Domain Emphasis in Cognition), Minor in Computer Science",
+            degree: "Bachelor's in Data Science (Major), Minor in Computer Science",
             institution: "University of California at Berkeley",
             location: "Berkeley, CA",
             startDate: "2021-09",
@@ -598,63 +598,6 @@ function loadResume() {
         return;
     }
 
-    // On small screens, render a simplified stacked timeline with an Experience/Education toggle
-    const isMobileTimeline = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-    if (isMobileTimeline) {
-        const mobileCardsHtml = allItems
-            .sort((a, b) => getStartEnd(b).start - getStartEnd(a).start)
-            .map((item) => {
-                const isExperience = item.type === 'experience';
-                const dateLabel = formatDateRange(item.startDate, item.endDate);
-                const title = isExperience ? item.title : item.degree;
-                const org = isExperience ? item.company : item.institution;
-                const location = item.location || '';
-
-                const relIdx = item.achievements ? item.achievements.indexOf('Relevant courses:') : -1;
-                const hasCourses = !isExperience && relIdx >= 0;
-                const courses = hasCourses && item.achievements ? item.achievements.slice(relIdx + 1) : [];
-                const achievementsForBody = item.achievements && item.achievements.length > 0
-                    ? (hasCourses ? item.achievements.slice(0, relIdx) : item.achievements)
-                    : [];
-
-                const achievementsHtml = achievementsForBody.length > 0
-                    ? `<ul class="timeline-mobile-achievements">${achievementsForBody.map((a) => `<li>${escapeHtml(a)}</li>`).join('')}</ul>`
-                    : '';
-
-                const coursesHtml = courses.length > 0
-                    ? `<div class="timeline-mobile-courses"><div class="timeline-mobile-courses-label">Relevant courses</div><ul>${courses.map((c) => `<li>${escapeHtml(c)}</li>`).join('')}</ul></div>`
-                    : '';
-
-                return `
-            <article class="timeline-mobile-item" data-type="${item.type}">
-                <div class="timeline-mobile-pill">${isExperience ? 'Experience' : 'Education'}</div>
-                <div class="timeline-mobile-date">${escapeHtml(dateLabel)}</div>
-                <h3 class="timeline-mobile-title">${escapeHtml(title)}</h3>
-                <div class="timeline-mobile-meta">${escapeHtml(org)}${location ? ' · ' + escapeHtml(location) : ''}</div>
-                <p class="timeline-mobile-description">${escapeHtml(item.description || '')}</p>
-                ${achievementsHtml}
-                ${coursesHtml}
-            </article>`;
-            })
-            .join('');
-
-        timelineContainer.innerHTML = `
-        <div class="timeline-mobile">
-            <div class="timeline-mobile-toggle" role="tablist" aria-label="Filter resume timeline">
-                <button class="timeline-toggle-btn is-active" data-filter="experience" type="button">Experience</button>
-                <button class="timeline-toggle-btn" data-filter="education" type="button">Education</button>
-                <button class="timeline-toggle-btn" data-filter="all" type="button">All</button>
-            </div>
-            <div class="timeline-mobile-list">
-                ${mobileCardsHtml}
-            </div>
-        </div>
-        `;
-
-        setupMobileTimelineFilter(timelineContainer);
-        return;
-    }
-
     const rangeStart = Math.min(...allItems.map((i) => getStartEnd(i).start));
     const rangeEnd = Math.max(...allItems.map((i) => getStartEnd(i).end));
     const rangeMs = rangeEnd - rangeStart;
@@ -688,7 +631,7 @@ function loadResume() {
     let boxesHTML = '';
     let marksHTML = '';
     let tickLinesHTML = '';
-    const experienceColors = ['#0f172a'];
+    const experienceColors = ['#0f172a', '#1e293b', '#334155'];
     const educationColors = ['#0f172a', '#1e293b', '#334155'];
 
     allItems.forEach((item, idx) => {
@@ -721,24 +664,19 @@ function loadResume() {
         tickLinesHTML += `<div class="timeline-tick-line" style="top: ${startMarkTopPct}%; left: ${tickLeftPct}%; width: ${tickWidthPct}%;" aria-hidden="true"></div>`;
 
         const dateLabel = formatDateRange(item.startDate, item.endDate);
-        const header = isExperience
-            ? `
-            <h3 class="timeline-title">${item.title}</h3>
-            <div class="timeline-company">${item.company}</div>
-            <div class="timeline-date">${dateLabel}</div>
-        `
-            : `
-            <h3 class="timeline-title">${item.institution}</h3>
-            <div class="timeline-company">${item.degree}</div>
+        const header = `
+            <h3 class="timeline-title">${isExperience ? item.title : item.degree}</h3>
+            <div class="timeline-company">${isExperience ? item.company : item.institution}</div>
             <div class="timeline-date">${dateLabel}</div>
         `;
+        const isBerkeley = (item.institution || '').toLowerCase().includes('berkeley');
         const relIdx = item.achievements ? item.achievements.indexOf('Relevant courses:') : -1;
-        const hasCourses = !isExperience && relIdx >= 0;
-        const courses = hasCourses && item.achievements ? item.achievements.slice(relIdx + 1) : [];
+        const courses = isBerkeley && relIdx >= 0 && item.achievements ? item.achievements.slice(relIdx + 1) : [];
         const achievementsForBody = item.achievements && item.achievements.length > 0
-            ? (hasCourses ? item.achievements.slice(0, relIdx) : item.achievements)
+            ? (isBerkeley && relIdx >= 0 ? item.achievements.slice(0, relIdx) : item.achievements)
             : [];
         const body = `
+            <div class="timeline-location">${item.location}</div>
             <p class="timeline-description">${item.description}</p>
             ${achievementsForBody.length > 0 ? `<ul class="timeline-achievements">${achievementsForBody.map((a) => `<li>${a}</li>`).join('')}</ul>` : ''}
         `;
@@ -748,7 +686,7 @@ function loadResume() {
             : '';
 
         boxesHTML += `
-            <div class="timeline-box timeline-box-${isExperience ? 'left' : 'right'}" 
+            <div class="timeline-box timeline-box-${isExperience ? 'left' : 'right'}${isBerkeley ? ' timeline-box-berkeley' : ''}" 
                  style="top: ${topPct}%; bottom: ${bottomPct}%; left: ${leftPct}%; width: ${laneWidth}%; --box-color: ${color}; --lane-width-pct: ${laneWidth};">
                 <div class="timeline-box-inner">
                     <div class="timeline-box-header">${header}</div>
@@ -769,33 +707,6 @@ function loadResume() {
             ${boxesHTML}
         </div>
     `;
-}
-
-// Mobile-only timeline filter toggle (Experience / Education / All)
-function setupMobileTimelineFilter(container) {
-    const buttons = container.querySelectorAll('.timeline-toggle-btn');
-    const cards = container.querySelectorAll('.timeline-mobile-item');
-    if (!buttons.length || !cards.length) return;
-
-    function applyFilter(filter) {
-        cards.forEach((card) => {
-            const type = card.getAttribute('data-type');
-            const show = filter === 'all' || filter === type;
-            card.style.display = show ? '' : 'none';
-        });
-    }
-
-    buttons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const filter = btn.getAttribute('data-filter');
-            buttons.forEach((b) => b.classList.remove('is-active'));
-            btn.classList.add('is-active');
-            applyFilter(filter);
-        });
-    });
-
-    // Initial state: Experience
-    applyFilter('experience');
 }
 
 // Smooth scrolling for navigation links

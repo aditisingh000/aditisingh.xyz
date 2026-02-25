@@ -5,16 +5,15 @@
 }
 
 :root {
-    /* Palette: deep brown base + teal accents */
+    /* Sepia palette — warm, paper-like, readable */
     --black: #2b2119;
     --black-mid: #3b2a20;
     --black-light: #6b4f3a;
-    /* Teal family (cool, green-blue) */
-    --teal: #0f766e;          /* primary accent */
-    --teal-bright: #14b8a6;   /* buttons, hovers */
-    --teal-soft: #22cbbb;     /* borders, highlights */
-    --teal-muted: #e0f7f4;    /* body text on dark bg */
-    /* Semantic aliases mapped to teal */
+    --teal: #a26a3c;
+    --teal-bright: #d89b5c;
+    --teal-soft: #c58b4e;
+    --teal-muted: #8a5c30;
+    /* Semantic aliases (all warmed to sepia tones) */
     --neon-pink: var(--teal);
     --neon-pink-bright: var(--teal-bright);
     --neon-pink-glow: var(--teal-soft);
@@ -25,45 +24,26 @@
     --hotpink-muted: var(--teal-muted);
     --bg-dark: var(--black);
     --bg-mid: var(--black-mid);
-    --white: #fdf7ec;
+    --white: #f7eddd;
     --gray: var(--black-light);
-    --light-gray: #b69575;
+    --light-gray: #8c6f57;
     --border: var(--teal-soft);
     --accent: var(--teal);
     --accent-hover: var(--teal-bright);
     --folder-beige: #f5e7d2;
     --folder-beige-active: #e7d3b8;
     --folder-placeholder: #d5bda0;
-    --folder-placeholder-text: #4b3320;
+    --folder-placeholder-text: #7d6247;
 }
 
 body {
-    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-weight: 400;
     color: var(--white);
     background-color: var(--black);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Georgia", "Times New Roman", serif;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-}
-
-p {
-    font-size: 0.975rem;
-    line-height: 1.8;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: none;
 }
 
 /* Nav bar: accent background, dark text */
@@ -80,7 +60,7 @@ a:hover {
 
 .nav .logo,
 .nav .nav-link {
-    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.95rem;
     font-weight: 500;
     text-transform: none;
@@ -92,26 +72,6 @@ a:hover {
 .nav .nav-link:hover {
     color: var(--black);
     opacity: 0.85;
-}
-
-.nav .nav-link {
-    position: relative;
-    padding-bottom: 0.15rem;
-}
-
-.nav .nav-link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 1px;
-    background-color: var(--black);
-    transition: width 0.2s ease;
-}
-
-.nav .nav-link:hover::after {
-    width: 100%;
 }
 
 /* Legacy: neon-nav uses same as .nav */
@@ -185,7 +145,7 @@ main {
 
 /* Live layout: simple centered hero (matches index.html) */
 .hero {
-    padding: 5.25rem 2rem 4rem;
+    padding: 5.5rem 2rem 4rem;
     background-color: var(--black);
 }
 
@@ -196,7 +156,6 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 0.25rem;
 }
 
 .hero-photo {
@@ -209,11 +168,10 @@ main {
 }
 
 .hero-title {
-    font-family: "Georgia", "Times New Roman", serif;
-    font-size: clamp(2.6rem, 4.6vw, 3.6rem);
+    font-size: clamp(2.75rem, 5vw, 4rem);
     font-weight: 600;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
     color: var(--white);
 }
 
@@ -371,16 +329,14 @@ main {
 }
 
 .hero-subtitle {
-    font-size: 0.95rem;
-    text-transform: uppercase;
+    font-size: 1.125rem;
     color: var(--light-gray);
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    margin-bottom: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
 }
 
 .hero-education {
-    margin-top: 1.25rem;
+    margin-top: 1rem;
     text-align: left;
     max-width: 520px;
 }
@@ -412,10 +368,16 @@ main {
     font-weight: 500;
 }
 
+/* About section immediately after hero: tighter top spacing for natural flow */
+.hero + .about .container {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 4.5rem 2rem;
+    padding: 4rem 2rem;
 }
 
 .section-title {
@@ -454,13 +416,12 @@ main {
     transition: all 0.3s ease;
     cursor: pointer;
     background-color: var(--black-mid);
-    border-radius: 10px;
 }
 
 .project-card:hover {
     border-color: var(--accent);
-    box-shadow: 0 14px 40px rgba(13, 148, 136, 0.25);
-    transform: translateY(-4px);
+    box-shadow: 0 4px 24px rgba(13, 148, 136, 0.22);
+    transform: translateY(-2px);
 }
 
 .project-card.project-link {
@@ -537,10 +498,10 @@ main {
 }
 
 .about-content {
-    max-width: 100%;
-    font-size: 0.975rem;
-    line-height: 1.85;
-    color: var(--teal-muted);
+    max-width: 700px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--hotpink-muted);
 }
 
 .awards-list {
@@ -573,9 +534,9 @@ main {
 
 .contact-content {
     max-width: 700px;
-    font-size: 0.975rem;
-    line-height: 1.85;
-    color: var(--teal-muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--hotpink-muted);
 }
 
 .contact-content a {
@@ -620,19 +581,12 @@ main {
     color: var(--black);
     font-size: 1.5rem;
     cursor: pointer;
-    border-radius: 999px;
-    transition: opacity 0.2s, box-shadow 0.2s, transform 0.15s ease;
+    transition: opacity 0.2s, box-shadow 0.2s;
 }
 
 .scroll-resume-btn:hover {
     opacity: 0.9;
     box-shadow: 0 0 24px var(--neon-pink-glow);
-    transform: translateY(2px);
-}
-
-.scroll-resume-btn:focus-visible {
-    outline: 2px solid var(--white);
-    outline-offset: 3px;
 }
 
 .scroll-resume-arrow {
@@ -671,13 +625,6 @@ main {
     max-width: 400px;
     width: 100%;
     text-align: center;
-    padding: 2.5rem 2rem 2.25rem;
-    border-radius: 14px;
-    border: 1px solid rgba(20, 184, 166, 0.4);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
-    background:
-        radial-gradient(circle at top left, rgba(34, 203, 187, 0.22), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(43, 33, 25, 0.9), rgba(12, 10, 9, 0.98));
 }
 
 .email-gate-title {
@@ -743,21 +690,13 @@ main.content-hidden {
     letter-spacing: 1px;
     font-weight: 500;
     cursor: pointer;
-    border-radius: 999px;
-    transition: background-color 0.2s, color 0.2s, transform 0.15s ease, box-shadow 0.15s ease;
+    transition: background-color 0.2s, color 0.2s;
     font-family: inherit;
 }
 
 .submit-btn:hover {
     background-color: var(--hotpink-bright);
     color: var(--black);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 26px rgba(20, 184, 166, 0.35);
-}
-
-.submit-btn:focus-visible {
-    outline: 2px solid var(--hotpink-bright);
-    outline-offset: 3px;
 }
 
 .form-message {
@@ -900,7 +839,7 @@ main.content-hidden {
 }
 
 .timeline-box:hover {
-    z-index: 30;
+    z-index: 20;
     transition: z-index 0s 0s, width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), min-width 0.35s ease, min-height 0.35s ease, left 0.35s ease, top 0.35s ease, bottom 0.35s ease;
     /* Never shrink: width/height only grow. Left/top/bottom stay so box doesn’t move. */
     min-width: max(320px, calc(var(--lane-width-pct) * 1%));
@@ -967,17 +906,18 @@ main.content-hidden {
     font-weight: 600;
 }
 
-/* Expand on hover: description + achievements (actual scrolling handled by .timeline-box-inner) */
+/* Expand on hover: location, description, achievements */
 .timeline-box-body {
+    max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: opacity 0.3s ease 0.05s;
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease 0.05s;
 }
 
 .timeline-box:hover .timeline-box-body {
+    max-height: 500px;
     opacity: 1;
-    overflow: visible;
-    transition: opacity 0.28s ease 0.02s;
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s, opacity 0.28s ease 0.02s;
 }
 
 .timeline-box-body .timeline-location {
@@ -1022,20 +962,23 @@ main.content-hidden {
     color: var(--hotpink-bright);
 }
 
-/* Education boxes with relevant courses: show all courses in a tooltip on hover */
+/* UC Berkeley box: show all courses in a tooltip on hover */
 .timeline-courses-tooltip {
+    max-height: 0;
     opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease 0.05s;
     margin-top: 0;
     flex-shrink: 0;
-    transition: opacity 0.3s ease 0.05s;
 }
 
-.timeline-box:hover .timeline-courses-tooltip {
+.timeline-box-berkeley:hover .timeline-courses-tooltip {
+    max-height: 420px;
     opacity: 1;
-    margin-top: 0.4rem;
-    padding-top: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--hotpink-dark);
-    transition: opacity 0.28s ease 0.02s;
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s, opacity 0.28s ease 0.02s;
 }
 
 .timeline-courses-tooltip-title {
@@ -1144,146 +1087,6 @@ main.content-hidden {
     text-align: center;
     padding: 4rem 2rem;
     color: var(--hotpink-muted);
-}
-
-/* Mobile stacked timeline (cards + toggle) */
-.timeline-mobile {
-    border-radius: 12px;
-    border: 1px solid var(--hotpink-dark);
-    background-color: var(--black-mid);
-    padding: 1.5rem 1.25rem 1.75rem;
-}
-
-.timeline-mobile-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.3rem;
-    border-radius: 999px;
-    background-color: var(--black);
-    border: 1px solid var(--hotpink-dark);
-    margin-bottom: 1.25rem;
-}
-
-.timeline-toggle-btn {
-    border: none;
-    background: transparent;
-    color: var(--hotpink-muted);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    padding: 0.35rem 0.9rem;
-    border-radius: 999px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.timeline-toggle-btn.is-active {
-    background-color: var(--hotpink);
-    color: var(--black);
-}
-
-.timeline-mobile-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.timeline-mobile-item {
-    padding: 1rem 0.9rem 1rem;
-    border-radius: 10px;
-    border: 1px solid rgba(148, 163, 184, 0.3);
-    background-color: rgba(15, 23, 42, 0.7);
-}
-
-.timeline-mobile-pill {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.1rem 0.6rem;
-    border-radius: 999px;
-    border: 1px solid rgba(248, 250, 252, 0.15);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--hotpink-muted);
-    margin-bottom: 0.4rem;
-}
-
-.timeline-mobile-date {
-    font-size: 0.75rem;
-    color: var(--hotpink-bright);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.2rem;
-}
-
-.timeline-mobile-title {
-    font-size: 1rem;
-    margin-bottom: 0.15rem;
-    color: var(--white);
-}
-
-.timeline-mobile-meta {
-    font-size: 0.8rem;
-    color: var(--hotpink-muted);
-    margin-bottom: 0.45rem;
-}
-
-.timeline-mobile-description {
-    font-size: 0.8rem;
-    color: var(--hotpink-muted);
-    line-height: 1.6;
-    margin-bottom: 0.45rem;
-}
-
-.timeline-mobile-achievements {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 0.4rem 0;
-    font-size: 0.78rem;
-    color: var(--hotpink-muted);
-}
-
-.timeline-mobile-achievements li {
-    padding-left: 1rem;
-    position: relative;
-    margin-bottom: 0.25rem;
-}
-
-.timeline-mobile-achievements li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--hotpink);
-}
-
-.timeline-mobile-courses {
-    border-top: 1px dashed rgba(148, 163, 184, 0.5);
-    padding-top: 0.45rem;
-    margin-top: 0.1rem;
-}
-
-.timeline-mobile-courses-label {
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--hotpink);
-    margin-bottom: 0.2rem;
-}
-
-.timeline-mobile-courses ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 0.76rem;
-    color: var(--hotpink-muted);
-}
-
-.timeline-mobile-courses li {
-    margin-bottom: 0.15rem;
 }
 
 .footer {
@@ -1609,5 +1412,41 @@ main.content-hidden {
         padding-bottom: 4rem;
     }
 
-    /* Axis-based desktop timeline is replaced by stacked mobile cards via JS */
+    .timeline.timeline-axis {
+        --timeline-height: 700px;
+        height: var(--timeline-height);
+    }
+
+    .timeline-axis-line {
+        left: 2rem;
+        margin-left: 0;
+        transform: none;
+    }
+
+    .timeline-axis-labels {
+        left: 2rem;
+        margin-left: 0;
+        transform: none;
+    }
+
+    .timeline-year {
+        left: 0;
+        transform: translateY(-50%);
+    }
+
+    .timeline-box {
+        left: 2.5rem !important;
+        width: calc(100% - 2.5rem - 0.5rem) !important;
+    }
+
+    .timeline-box:hover {
+        max-width: calc(100vw - 2rem);
+        width: min(320px, calc(100% - 0.5rem)) !important;
+    }
+
+    .timeline-box-left:hover,
+    .timeline-box-right:hover {
+        left: 2.5rem !important;
+        right: auto;
+    }
 }
