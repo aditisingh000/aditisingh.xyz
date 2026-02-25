@@ -164,6 +164,18 @@ a:hover {
     gap: 2rem;
 }
 
+.nav-link-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.nav-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
 .nav.neon-nav .nav-link {
     font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.9rem;
