@@ -152,6 +152,19 @@ main {
 .hero-content {
     max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-photo {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 1.25rem;
+    border: 3px solid rgba(255, 255, 255, 0.15);
 }
 
 .hero-title {
