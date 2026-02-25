@@ -322,6 +322,12 @@ main {
     letter-spacing: 0.01em;
 }
 
+/* About section immediately after hero: tighter top spacing for natural flow */
+.hero + .about .container {
+    padding-top: 2.5rem;
+    padding-bottom: 5rem;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -459,6 +465,26 @@ main {
 
 .about-content a:hover {
     color: var(--accent);
+}
+
+.contact-content {
+    max-width: 700px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--hotpink-muted);
+}
+
+.contact-content a {
+    color: var(--hotpink-dark);
+    font-weight: 500;
+}
+
+.contact-content a:hover {
+    color: var(--accent);
+}
+
+.contact {
+    border-top: 1px solid var(--border);
 }
 
 /* Scroll for resume — blurb + arrow button (same style as click me) */
@@ -1269,6 +1295,11 @@ main.content-hidden {
 
     .container {
         padding: 4rem 1.5rem;
+    }
+
+    .hero + .about .container {
+        padding-top: 2rem;
+        padding-bottom: 4rem;
     }
 
     .timeline.timeline-axis {

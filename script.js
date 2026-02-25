@@ -103,43 +103,46 @@ const resumeData = {
     ]
 };
 
-// Projects data – notebookUrl links to notebooks in projects folder (resume-aligned)
+// Projects data – each project has its own notebook when available (resume-aligned)
 const projects = [
     {
         id: 1,
-        title: "Natural Language Processing (Annotation)",
-        description: "Developed an annotated dataset for multi-class book audience ratings using 500 passages from Project Gutenberg and LibriVox. Conducted manual annotations, reconciled discrepancies, produced annotation guidelines, and built a classifier to evaluate dataset accuracy.",
-        notebookUrl: "projects/aditi-singh---7f56021c/Lab9b-Text_Analytics.ipynb",
+        title: "Coronary Heart Disease (ML Models)",
+        description: "Developed three ML models to estimate angiographic coronary disease probabilities using patient attributes from global clinical and noninvasive angiography test data. Evaluated model metrics to identify at-risk patients.",
+        notebookUrl: "projects/aditi-singh---7f56021c/Coronary-Heart-Disease-ML-Models.ipynb",
         date: "2024",
-        tags: ["NLP", "Annotation", "Classification"]
+        tags: ["ML", "Healthcare", "Clinical"]
     },
     {
         id: 2,
-        title: "Machine Learning (Clinical & CNN)",
-        description: "Built ML models to estimate angiographic coronary disease probabilities from global clinical and noninvasive angiography data. Also developed CNN models (convolutional layers, max pooling, fully connected) for multiclass image classification on CIFAR-10.",
-        notebookUrl: "projects/aditi-singh---7f56021c/Assignment1 Neural Networks - Aditi Singh and Ching Hei Chan.ipynb",
+        title: "CNN Multiclass Image Classification (CIFAR-10)",
+        description: "Developed multiple convolution neural network models with CNN layers, max pooling, and fully connected layers to address the multiclass image classification problem using the CIFAR-10 dataset.",
+        notebookUrl: "projects/aditi-singh---7f56021c/Neural-Networks-Clinical-CIFAR10-CNN.ipynb",
         date: "2024",
-        tags: ["ML", "CNN", "CIFAR-10", "Healthcare"]
+        tags: ["ML", "CNN", "CIFAR-10", "Computer Vision"]
     },
     {
         id: 3,
-        title: "Data Structures (Algorithms)",
-        description: "Implemented algorithms and data structures: DFS edge classification, closest-pair, and related coursework. Java/Python implementations for graph and geometry problems.",
-        notebookUrl: "projects/aditi-singh---7f56021c/cs170-sp25-coding/hw3/dfs-edge-classification.ipynb",
-        notebookUrls: [
-            { label: "DFS edge classification", url: "projects/aditi-singh---7f56021c/cs170-sp25-coding/hw3/dfs-edge-classification.ipynb" },
-            { label: "Closest pair", url: "projects/aditi-singh---7f56021c/cs170-sp25-coding/hw2/closest-pair.ipynb" }
-        ],
-        date: "2023–2025",
-        tags: ["Algorithms", "Data Structures", "Python"]
+        title: "Binary Perceptron",
+        description: "Implemented a binary perceptron model for classification from scratch.",
+        date: "2024",
+        tags: ["ML", "Perceptron", "Classification"]
     },
     {
         id: 4,
-        title: "Email & Movie Classifiers",
-        description: "Logistic Regression classifier for spam vs non-spam emails and k-nearest-neighbors classifier to predict whether a movie is comedy or thriller.",
-        notebookUrl: "projects/aditi-singh---7f56021c/Lab10-Movie_lens.ipynb",
+        title: "Email Ham or Spam Classifier",
+        description: "Developed a Logistic Regression classifier for spam/non-spam (ham) email classification.",
+        notebookUrl: "projects/aditi-singh---7f56021c/Email-Movie-Classifiers.ipynb",
         date: "2023",
-        tags: ["Data Science", "Logistic Regression", "KNN"]
+        tags: ["Data Science", "Logistic Regression", "NLP"]
+    },
+    {
+        id: 5,
+        title: "K-Nearest Neighbors Movie Classification",
+        description: "Developed a k-nearest-neighbors classifier to predict whether a movie is a comedy or a thriller.",
+        notebookUrl: "projects/aditi-singh---7f56021c/Email-Movie-Classifiers.ipynb",
+        date: "2023",
+        tags: ["Data Science", "KNN", "Classification"]
     }
 ];
 
