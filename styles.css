@@ -833,7 +833,7 @@ main.content-hidden {
 }
 
 .timeline-box:hover {
-    z-index: 20;
+    z-index: 30;
     transition: z-index 0s 0s, width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), min-width 0.35s ease, min-height 0.35s ease, left 0.35s ease, top 0.35s ease, bottom 0.35s ease;
     /* Never shrink: width/height only grow. Left/top/bottom stay so box doesn’t move. */
     min-width: max(320px, calc(var(--lane-width-pct) * 1%));
