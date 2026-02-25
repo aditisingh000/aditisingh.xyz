@@ -368,12 +368,6 @@ main {
     font-weight: 500;
 }
 
-/* About section immediately after hero: tighter top spacing for natural flow */
-.hero + .about .container {
-    padding-top: 2.5rem;
-    padding-bottom: 4rem;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -498,10 +492,29 @@ main {
 }
 
 .about-content {
-    max-width: 700px;
+    max-width: 100%;
     font-size: 1rem;
     line-height: 1.8;
     color: var(--hotpink-muted);
+}
+
+.awards-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.awards-list li {
+    margin-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    position: relative;
+}
+
+.awards-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--hotpink);
 }
 
 .about-content a {
@@ -887,18 +900,17 @@ main.content-hidden {
     font-weight: 600;
 }
 
-/* Expand on hover: location, description, achievements */
+/* Expand on hover: description + achievements (actual scrolling handled by .timeline-box-inner) */
 .timeline-box-body {
-    max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease 0.05s;
+    transition: opacity 0.3s ease 0.05s;
 }
 
 .timeline-box:hover .timeline-box-body {
-    max-height: 500px;
     opacity: 1;
-    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s, opacity 0.28s ease 0.02s;
+    overflow: visible;
+    transition: opacity 0.28s ease 0.02s;
 }
 
 .timeline-box-body .timeline-location {
@@ -943,7 +955,7 @@ main.content-hidden {
     color: var(--hotpink-bright);
 }
 
-/* UC Berkeley box: show all courses in a tooltip on hover */
+/* Education boxes with relevant courses: show all courses in a tooltip on hover */
 .timeline-courses-tooltip {
     max-height: 0;
     opacity: 0;
@@ -953,11 +965,12 @@ main.content-hidden {
     flex-shrink: 0;
 }
 
-.timeline-box-berkeley:hover .timeline-courses-tooltip {
+.timeline-box:hover .timeline-courses-tooltip {
     max-height: 420px;
     opacity: 1;
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
+    overflow-y: auto;
+    margin-top: 0.4rem;
+    padding-top: 0.5rem;
     border-top: 1px solid var(--hotpink-dark);
     transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s, opacity 0.28s ease 0.02s;
 }
