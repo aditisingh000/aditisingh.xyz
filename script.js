@@ -599,7 +599,12 @@ function loadResume() {
     }
 
     // On small screens, render a simplified stacked timeline with an Experience/Education toggle
-    const isMobileTimeline = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    let isMobileTimeline = window.innerWidth <= 768;
+    if (window.matchMedia) {
+        try {
+            isMobileTimeline = window.matchMedia('(max-width: 768px)').matches;
+        } catch (_) {}
+    }
     if (isMobileTimeline) {
         const mobileCardsHtml = allItems
             .sort((a, b) => getStartEnd(b).start - getStartEnd(a).start)
