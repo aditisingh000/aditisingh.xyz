@@ -145,7 +145,7 @@ main {
 
 /* Live layout: simple centered hero (matches index.html) */
 .hero {
-    padding: 5.5rem 2rem 2rem;
+    padding: 5.5rem 2rem 4rem;
     background-color: var(--black);
 }
 
@@ -371,13 +371,13 @@ main {
 /* About section immediately after hero: tighter top spacing for natural flow */
 .hero + .about .container {
     padding-top: 2.5rem;
-    padding-bottom: 5rem;
+    padding-bottom: 4rem;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 6rem 2rem;
+    padding: 4rem 2rem;
 }
 
 .section-title {
@@ -707,7 +707,7 @@ main.content-hidden {
     position: relative;
     max-width: 1000px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 0;
 }
 
 /* Time-axis timeline (Gantt/calendar style): vertical axis = time, boxes positioned by date */
@@ -1072,7 +1072,7 @@ main.content-hidden {
 
 .footer {
     border-top: 2px solid var(--hotpink);
-    padding: 3rem 2rem;
+    padding: 4rem 2rem;
     text-align: center;
     background-color: var(--black);
     color: var(--hotpink-muted);
