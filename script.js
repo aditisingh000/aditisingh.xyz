@@ -149,6 +149,16 @@ const projects = [
 // Email gate: Formspree form ID – replace with your form ID from https://formspree.io
 const FORMSPREE_GATE_ID = 'YOUR_FORM_ID';
 
+// Validate email format (local-part @ domain with TLD). Rejects empty, missing @, or invalid structure.
+function isValidEmail(email) {
+    if (!email || typeof email !== 'string') return false;
+    const trimmed = email.trim();
+    if (!trimmed) return false;
+    // Standard pattern: non-empty local part, @, non-empty domain, dot, non-empty TLD (2+ chars)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    return emailRegex.test(trimmed);
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initEmailGate();
@@ -182,6 +192,12 @@ function initEmailGate() {
         e.preventDefault();
         const email = (input.value || '').trim();
         if (!email) return;
+
+        if (!isValidEmail(email)) {
+            messageEl.textContent = 'Please enter a valid email address (e.g. you@example.com).';
+            messageEl.className = 'gate-message error';
+            return;
+        }
 
         messageEl.textContent = '';
         messageEl.className = 'gate-message';

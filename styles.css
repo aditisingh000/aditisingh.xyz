@@ -5,15 +5,15 @@
 }
 
 :root {
-    /* Teal & slate — calm, readable, modern */
-    --black: #0f172a;
-    --black-mid: #1e293b;
-    --black-light: #334155;
-    --teal: #0d9488;
-    --teal-bright: #2dd4bf;
-    --teal-soft: #14b8a6;
-    --teal-muted: #0f766e;
-    /* Semantic aliases */
+    /* Sepia palette — warm, paper-like, readable */
+    --black: #2b2119;
+    --black-mid: #3b2a20;
+    --black-light: #6b4f3a;
+    --teal: #a26a3c;
+    --teal-bright: #d89b5c;
+    --teal-soft: #c58b4e;
+    --teal-muted: #8a5c30;
+    /* Semantic aliases (all warmed to sepia tones) */
     --neon-pink: var(--teal);
     --neon-pink-bright: var(--teal-bright);
     --neon-pink-glow: var(--teal-soft);
@@ -24,20 +24,20 @@
     --hotpink-muted: var(--teal-muted);
     --bg-dark: var(--black);
     --bg-mid: var(--black-mid);
-    --white: #f1f5f9;
+    --white: #f7eddd;
     --gray: var(--black-light);
-    --light-gray: #475569;
+    --light-gray: #8c6f57;
     --border: var(--teal-soft);
     --accent: var(--teal);
     --accent-hover: var(--teal-bright);
-    --folder-beige: #f8fafc;
-    --folder-beige-active: #e2e8f0;
-    --folder-placeholder: #cbd5e1;
-    --folder-placeholder-text: #64748b;
+    --folder-beige: #f5e7d2;
+    --folder-beige-active: #e7d3b8;
+    --folder-placeholder: #d5bda0;
+    --folder-placeholder-text: #7d6247;
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-weight: 400;
     color: var(--white);
     background-color: var(--black);
@@ -60,7 +60,7 @@ body {
 
 .nav .logo,
 .nav .nav-link {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.95rem;
     font-weight: 500;
     text-transform: none;
@@ -96,7 +96,7 @@ body {
 }
 
 .nav-home {
-    font-family: 'Oswald', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -125,7 +125,7 @@ body {
 }
 
 .nav.neon-nav .nav-link {
-    font-family: 'Oswald', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -194,7 +194,7 @@ main {
 
 /* Big title: extremely bold condensed sans, all caps, neon pink — like DESIGN PORTFOLIO */
 .hero-big-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: clamp(3.5rem, 8vw, 7rem);
     font-weight: 400;
     letter-spacing: 0.02em;
@@ -209,7 +209,7 @@ main {
 }
 
 .hero-bio p {
-    font-family: 'Libre Baskerville', serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.95rem;
     line-height: 1.8;
     color: var(--white);
@@ -236,7 +236,7 @@ main {
     border: 2px solid var(--black);
     background: var(--neon-pink);
     color: var(--black);
-    font-family: 'Oswald', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -335,6 +335,39 @@ main {
     letter-spacing: 0.01em;
 }
 
+.hero-education {
+    margin-top: 1rem;
+    text-align: left;
+    max-width: 520px;
+}
+
+.hero-edu-item {
+    margin-bottom: 0.75rem;
+}
+
+.hero-edu-item:last-child {
+    margin-bottom: 0;
+}
+
+.hero-edu-school {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.01em;
+}
+
+.hero-edu-degree {
+    font-size: 0.95rem;
+    color: var(--light-gray);
+    font-weight: 400;
+    margin-top: 0.2rem;
+}
+
+.hero-edu-years {
+    color: var(--teal-soft);
+    font-weight: 500;
+}
+
 /* About section immediately after hero: tighter top spacing for natural flow */
 .hero + .about .container {
     padding-top: 2.5rem;
@@ -348,7 +381,7 @@ main {
 }
 
 .section-title {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: "Georgia", "Times New Roman", serif;
     font-size: 1.6rem;
     font-weight: 600;
     margin-bottom: 3rem;
