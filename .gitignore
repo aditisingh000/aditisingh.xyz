@@ -32,3 +32,6 @@ build/
 # Backups / archives
 *.tar
 *.tar.gz
+
+# Local class/project files (not on website)
+projects/aditi-singh---7f56021c/
