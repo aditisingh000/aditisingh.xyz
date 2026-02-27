@@ -324,7 +324,6 @@ function openNotebook(url, title) {
     const container = modal.querySelector('#notebookViewerRoot');
     // Resolve URL so it works from any base path and spaces are encoded
     const fetchUrl = (url && url.startsWith('http')) ? url : new URL(url, window.location.href).href;
-    const isFileProtocol = window.location.protocol === 'file:';
 
     fetch(fetchUrl)
         .then(r => { if (!r.ok) throw new Error(r.status + ' ' + r.statusText); return r.json(); })
@@ -334,13 +333,7 @@ function openNotebook(url, title) {
             renderNotebook(container, data);
         })
         .catch(err => {
-            let msg = 'Could not load notebook.';
-            if (isFileProtocol) {
-                msg += ' Browsers block loading local files when you open the page from disk (file://). Run a local server in this folder instead, e.g. <code>npx serve</code> or <code>python -m http.server 8000</code>, then open http://localhost:8000';
-            } else {
-                msg += ' The file may be missing or the path is wrong.';
-            }
-            msg += ' You can still <a href="' + escapeAttr(fetchUrl) + '" target="_blank" rel="noopener">open the .ipynb file</a> directly.';
+            const msg = 'Could not load notebook. You can still <a href="' + escapeAttr(fetchUrl) + '" target="_blank" rel="noopener">open the .ipynb file</a> directly.';
             container.innerHTML = '<div class="notebook-error">' + msg + '</div>';
             container.classList.remove('notebook-loading');
         });
