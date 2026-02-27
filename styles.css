@@ -66,7 +66,7 @@ a:hover {
     text-decoration: none;
 }
 
-/* Nav bar: accent background, dark text */
+/* Nav bar: dark brown background, white text */
 .nav {
     position: fixed;
     top: 0;
@@ -74,7 +74,7 @@ a:hover {
     right: 0;
     z-index: 1000;
     padding: 0.75rem 0;
-    background-color: var(--accent);
+    background-color: #1a1510;
     border: none;
 }
 
@@ -85,12 +85,12 @@ a:hover {
     font-weight: 500;
     text-transform: none;
     letter-spacing: 0;
-    color: var(--black);
+    color: #ffffff;
     text-decoration: none;
 }
 
 .nav .nav-link:hover {
-    color: var(--black);
+    color: #ffffff;
     opacity: 0.85;
 }
 
@@ -106,7 +106,7 @@ a:hover {
     bottom: 0;
     width: 0;
     height: 1px;
-    background-color: var(--black);
+    background-color: #ffffff;
     transition: width 0.2s ease;
 }
 
@@ -120,7 +120,7 @@ a:hover {
     top: 0;
     left: 0;
     right: 0;
-    background-color: var(--neon-pink);
+    background-color: #1a1510;
     z-index: 1000;
     padding: 0.75rem 0;
     border: none;
@@ -141,7 +141,7 @@ a:hover {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--black);
+    color: #ffffff;
     text-decoration: none;
 }
 
@@ -151,8 +151,8 @@ a:hover {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.02em;
-    color: var(--black);
-    -webkit-text-stroke: 0.5px var(--black);
+    color: #ffffff;
+    -webkit-text-stroke: 0.5px rgba(255,255,255,0.5);
     margin: 0;
     position: absolute;
     left: 50%;
@@ -182,12 +182,12 @@ a:hover {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--black);
+    color: #ffffff;
     text-decoration: none;
 }
 
 .nav.neon-nav .nav-link:hover {
-    color: var(--black);
+    color: #ffffff;
     opacity: 0.85;
 }
 
@@ -663,88 +663,9 @@ main {
     transform: translateY(0);
 }
 
-/* Email gate: full-screen overlay until user enters email */
-.email-gate {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background-color: var(--black);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-}
-
-.email-gate.hidden {
-    display: none;
-}
-
-.email-gate-content {
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    padding: 2.5rem 2rem 2.25rem;
-    border-radius: 14px;
-    border: 1px solid rgba(20, 184, 166, 0.4);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
-    background:
-        radial-gradient(circle at top left, rgba(34, 203, 187, 0.22), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(43, 33, 25, 0.9), rgba(12, 10, 9, 0.98));
-}
-
-.email-gate-title {
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: lowercase;
-    margin-bottom: 0.5rem;
-    color: var(--hotpink);
-}
-
-.email-gate-subtitle {
-    font-size: 0.875rem;
-    color: var(--hotpink-muted);
-    margin-bottom: 2rem;
-}
-
-.email-gate-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.email-gate-form input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--hotpink-dark);
-    background-color: var(--black-mid);
-    font-family: inherit;
-    font-size: 1rem;
-    color: var(--white);
-    transition: border-color 0.2s;
-}
-
-.email-gate-form input:focus {
-    outline: none;
-    border-color: var(--hotpink);
-}
-
-.gate-message {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    min-height: 1.25rem;
-}
-
-.gate-message.error {
-    color: var(--hotpink-bright);
-}
-
-main.content-hidden {
-    visibility: hidden;
-    position: absolute;
-    left: -9999px;
-}
-
+/* (email gate removed)
+.submit-btn was here - reuse if adding a contact form submit button
+*/
 .submit-btn {
     background-color: var(--hotpink);
     color: var(--black);
