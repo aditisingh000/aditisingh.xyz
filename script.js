@@ -148,11 +148,18 @@ const projects = [
         notebookUrl: "projects/aditi-singh---7f56021c/Email-Movie-Classifiers.ipynb",
         date: "2023",
         tags: ["Data Science", "KNN", "Classification"]
+    },
+    {
+        id: 6,
+        title: "Book Audience Rating Annotation Dataset",
+        description: "Developed an annotated dataset for multi-class book audience ratings by collecting 500 passages and reviews from Project Gutenberg and LibriVox. Conducted manual annotations, reconciled discrepancies, and adjudicated through group discussions. Produced a comprehensive annotation guideline and created a classifier to test the accuracy of our dataset.",
+        date: "2024",
+        tags: ["Data Science", "NLP", "Data Annotation"]
     }
 ];
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadFolderStack();
     loadProjects();
     loadResume();
@@ -187,7 +194,7 @@ function loadFolderStack() {
         const link = tab.querySelector('a');
         const notebookUrl = tab.getAttribute('data-notebook-url');
         const notebookTitle = tab.getAttribute('data-notebook-title') || ('Project ' + (i + 1));
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             if (notebookUrl) {
                 openNotebook(notebookUrl, notebookTitle);
@@ -195,7 +202,7 @@ function loadFolderStack() {
                 document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
             }
         });
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             container.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
         });
@@ -205,7 +212,7 @@ function loadFolderStack() {
 // Load and display projects — cards link to notebooks in projects folder
 function loadProjects() {
     const projectsGrid = document.getElementById('projectsGrid');
-    
+
     if (projects.length === 0) {
         projectsGrid.innerHTML = `
             <div class="project-placeholder">
@@ -297,7 +304,7 @@ function openProjectDetail(el) {
         </div>
     `;
     document.body.appendChild(modal);
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) closeModal(modal.querySelector('.modal-close'));
     });
 }
@@ -338,7 +345,7 @@ function openNotebook(url, title) {
             container.classList.remove('notebook-loading');
         });
 
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) closeModal(modal.querySelector('.modal-close'));
     });
 }
@@ -372,7 +379,7 @@ function renderNotebook(container, data) {
         if (typeof hljs !== 'undefined') {
             try {
                 codeHtml = hljs.highlight(source, { language: 'python' }).value;
-            } catch (_) {}
+            } catch (_) { }
         }
         codeEl.innerHTML = `
             <div class="jp-Cell-inputWrapper">
@@ -512,7 +519,7 @@ function loadResume() {
     if (window.matchMedia) {
         try {
             isMobileTimeline = window.matchMedia('(max-width: 768px)').matches;
-        } catch (_) {}
+        } catch (_) { }
     }
     if (isMobileTimeline) {
         const mobileCardsHtml = allItems
@@ -732,7 +739,7 @@ function setupSmoothScrolling() {
 function setupScrollForResume() {
     const btn = document.getElementById('scrollResumeBtn');
     if (!btn) return;
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         const resume = document.getElementById('resume');
         if (resume) {
             resume.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -744,8 +751,8 @@ function setupScrollForResume() {
 function setupTimelineReveal() {
     const container = document.getElementById('timelineContainer');
     if (!container) return;
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
